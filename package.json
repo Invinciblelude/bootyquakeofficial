@@ -1,0 +1,9 @@
+{
+  "name": "bootyquake-official",
+  "version": "1.0.0",
+  "description": "BootyQuake Official - Bootyquake Chronicles",
+  "scripts": {
+    "serve": "npx serve . -p 8080",
+    "start": "npm run serve"
+  }
+}

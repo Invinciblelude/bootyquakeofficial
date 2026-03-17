@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <base href="/">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="BootyQuake Official - Move how you feel, vibe how you live. 22 tracks of AI-enhanced beats. Celebrating movement, rhythm & togetherness. @bootyquakeofficial">
+  <title>BootyQuake Official | Luxury Trap for Dancers & Clubs</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./styles.css">
+  <link rel="icon" href="./hero-album-art.png" type="image/png">
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <a href="#home" class="logo">BOOTYQUAKE</a>
+    <nav class="nav">
+      <a href="#home">Home</a>
+      <a href="#music">Music</a>
+      <a href="#videos">Videos</a>
+      <a href="#events">Events</a>
+      <a href="#epk">EPK</a>
+      <a href="#about">About</a>
+      <a href="#store">Store</a>
+      <a href="#contact">Contact</a>
+    </nav>
+    <div class="social-header">
+      <a href="https://instagram.com/bootyquakeofficial" target="_blank" rel="noopener" aria-label="Instagram">IG</a>
+      <a href="https://tiktok.com/@bootyquakeofficial" target="_blank" rel="noopener" aria-label="TikTok">TikTok</a>
+      <a href="https://youtube.com/@bootyquakeofficial" target="_blank" rel="noopener" aria-label="YouTube">YT</a>
+      <a href="https://open.spotify.com/artist/bootyquakeofficial" target="_blank" rel="noopener" aria-label="Spotify">Spotify</a>
+    </div>
+    <button class="menu-toggle" aria-label="Toggle menu">
+      <span></span><span></span><span></span>
+    </button>
+  </header>
+
+  <main>
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+      <div class="hero-media">
+        <div class="hero-image"></div>
+        <div class="hero-overlay"></div>
+      </div>
+      <div class="hero-content">
+        <span class="hero-badge">Bootyquake Chronicles</span>
+        <h1 class="hero-title">Luxury Booty-Shaking Trap for Dancers & Clubs</h1>
+        <p class="hero-subtitle">Move how you feel, vibe how you live. 22 tracks. Pure joy, pure connection, pure movement.</p>
+        <button type="button" class="cta-primary" id="play-bootyquake">Play Bootyquake Radio</button>
+      </div>
+      <div class="hero-scroll">
+        <span>Scroll</span>
+        <div class="scroll-line"></div>
+      </div>
+    </section>
+
+    <!-- Music Section -->
+    <section id="music" class="section music-section">
+      <div class="container">
+        <h2 class="section-title">Music</h2>
+        <p class="section-intro">Heavy 808s. Real talk. Hustle anthems & club bangers. Press play and let the bass drop.</p>
+        <div class="culture-banner">
+          <span class="culture-tag">For the culture</span>
+          <p>Pure joy, pure connection, pure movement. When the beat drops, judgment disappears. <a href="https://instagram.com/bootyquakeofficial" target="_blank" rel="noopener">@bootyquakeofficial</a></p>
+        </div>
+        
+        <!-- Bootyquake Radio - native player (no affiliate links) -->
+        <div class="music-player">
+          <audio id="bootyquake-audio" preload="metadata"></audio>
+          <div class="player-controls">
+            <button type="button" class="player-btn" id="play-pause" aria-label="Play">▶</button>
+            <span class="player-track">Block Party Bootyquake</span>
+            <span class="player-time">0:00 / 0:00</span>
+          </div>
+          <div class="karaoke-container" id="karaoke-container">
+            <p class="karaoke-label">Lyrics</p>
+            <div class="karaoke-lyrics" id="karaoke-lyrics" aria-live="polite">Press play to see lyrics</div>
+          </div>
+        </div>
+
+        <!-- Add your Spotify playlist URL below when ready (no affiliate links) -->
+        <div class="spotify-embed" style="display:none">
+          <iframe style="border-radius:12px" src="" width="100%" height="380" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy" title="Bootyquake Radio"></iframe>
+        </div>
+
+        <p class="album-label">Bootyquake Chronicles — Full Catalog</p>
+        <div class="tracks-grid">
+          <article class="track-card" data-track="block-party-bootyquake">
+            <div class="track-artwork"></div>
+            <div class="track-info">
+              <h3>Block Party Bootyquake</h3>
+              <p>Block party vibes. Community. Come through.</p>
+              <a href="#" class="track-play">▶ Play</a>
+            </div>
+          </article>
+          <article class="track-card" data-track="neon-thong-vision">
+            <div class="track-artwork"></div>
+            <div class="track-info">
+              <h3>Neon Thong Vision</h3>
+              <p>Neon trap. Nightlife. See the vision.</p>
+              <a href="#" class="track-play">▶ Play</a>
+            </div>
+          </article>
+          <article class="track-card" data-track="queens-of-the-shakes">
+            <div class="track-artwork"></div>
+            <div class="track-info">
+              <h3>Queen of the Quake</h3>
+              <p>Queen energy. Crown up. Run the show.</p>
+              <a href="#" class="track-play">▶ Play</a>
+            </div>
+          </article>
+          <article class="track-card" data-track="boss-that-booty">
+            <div class="track-artwork"></div>
+            <div class="track-info">
+              <h3>Boss That Booty</h3>
+              <p>Boss energy. Run the block. No cap.</p>
+              <a href="#" class="track-play">▶ Play</a>
+            </div>
+          </article>
+          <article class="track-card" data-track="rachet-earthquake">
+            <div class="track-artwork"></div>
+            <div class="track-info">
+              <h3>Rachet Earthquake</h3>
+              <p>Raw energy. Shake the room. Make it move.</p>
+              <a href="#" class="track-play">▶ Play</a>
+            </div>
+          </article>
+          <article class="track-card" data-track="strip-to-the-top">
+            <div class="track-artwork"></div>
+            <div class="track-info">
+              <h3>Strip to the Top</h3>
+              <p>Climb. Ambition. From the bottom to the top.</p>
+              <a href="#" class="track-play">▶ Play</a>
+            </div>
+          </article>
+          <article class="track-card" data-track="life-is-amazing">
+            <div class="track-artwork"></div>
+            <div class="track-info">
+              <h3>LIFE IS AMAZING</h3>
+              <p>Gratitude. Blessings. Count your wins.</p>
+              <a href="#" class="track-play">▶ Play</a>
+            </div>
+          </article>
+          <article class="track-card" data-track="billionaire-daydreams">
+            <div class="track-artwork"></div>
+            <div class="track-info">
+              <h3>BILLIONAIRE DAYDREAMS</h3>
+              <p>Money moves. Hustler mentality. Dream big.</p>
+              <a href="#" class="track-play">▶ Play</a>
+            </div>
+          </article>
+          <article class="track-card" data-track="fetch-that-monet">
+            <div class="track-artwork"></div>
+            <div class="track-info">
+              <h3>Fetch That Money</h3>
+              <p>Fetch money, fetch plays. Hustle anthem. Secure the bag.</p>
+              <a href="#" class="track-play">▶ Play</a>
+            </div>
+          </article>
+          <article class="track-card" data-track="booty-bag">
+            <div class="track-artwork"></div>
+            <div class="track-info">
+              <h3>BOOTY BAG</h3>
+              <p>Get the bag. Stack. No excuses.</p>
+              <a href="#" class="track-play">▶ Play</a>
+            </div>
+          </article>
+          <article class="track-card" data-track="royal-life">
+            <div class="track-artwork"></div>
+            <div class="track-info">
+              <h3>Royal Life</h3>
+              <p>Living like royalty. Elevated. Stay blessed.</p>
+              <a href="#" class="track-play">▶ Play</a>
+            </div>
+          </article>
+          <article class="track-card" data-track="loyal-love-righteous-life">
+            <div class="track-artwork"></div>
+            <div class="track-info">
+              <h3>LOYAL LOVE / RIGHTEOUS LIFE</h3>
+              <p>Loyalty. Real love. Stay true to yours.</p>
+              <a href="#" class="track-play">▶ Play</a>
+            </div>
+          </article>
+          <article class="track-card" data-track="billion-dollar-bitch-talk">
+            <div class="track-artwork"></div>
+            <div class="track-info">
+              <h3>BILLION DOLLAR B_TCH TALK</h3>
+              <p>Confidence. Boss talk. Know your worth.</p>
+              <a href="#" class="track-play">▶ Play</a>
+            </div>
+          </article>
+          <article class="track-card" data-track="big-booty-hustle">
+            <div class="track-artwork"></div>
+            <div class="track-info">
+              <h3>Big Booty Hustle</h3>
+              <p>Grind. Come up. Hustle culture.</p>
+              <a href="#" class="track-play">▶ Play</a>
+            </div>
+          </article>
+          <article class="track-card" data-track="bounce-back-booty">
+            <div class="track-artwork"></div>
+            <div class="track-info">
+              <h3>Bounce Back Booty</h3>
+              <p>Resilience. Come back stronger. Never fold.</p>
+              <a href="#" class="track-play">▶ Play</a>
+            </div>
+          </article>
+          <article class="track-card" data-track="courtside-ass">
+            <div class="track-artwork"></div>
+            <div class="track-info">
+              <h3>Courtside Ass</h3>
+              <p>VIP lifestyle. Courtside seats. Level up.</p>
+              <a href="#" class="track-play">▶ Play</a>
+            </div>
+          </article>
+          <article class="track-card" data-track="shake-that-booty-please">
+            <div class="track-artwork"></div>
+            <div class="track-info">
+              <h3>Shake That Booty Please</h3>
+              <p>Bag come first. Cash machine. No free views.</p>
+              <a href="#" class="track-play">▶ Play</a>
+            </div>
+          </article>
+          <article class="track-card">
+            <div class="track-artwork"></div>
+            <div class="track-info">
+              <h3>SHAKE DAT SHIT</h3>
+              <p>Let loose. Twerk anthem. No inhibitions.</p>
+              <a href="#" class="track-play">▶ Play</a>
+            </div>
+          </article>
+          <article class="track-card" data-track="precious-things">
+            <div class="track-artwork"></div>
+            <div class="track-info">
+              <h3>Precious Things</h3>
+              <p>Valuing what matters. Real over riches.</p>
+              <a href="#" class="track-play">▶ Play</a>
+            </div>
+          </article>
+          <article class="track-card" data-track="astro-booty">
+            <div class="track-artwork"></div>
+            <div class="track-info">
+              <h3>ASTRO BOOTY</h3>
+              <p>Cosmic trap. Reach for the stars. Out of this world.</p>
+              <a href="#" class="track-play">▶ Play</a>
+            </div>
+          </article>
+          <article class="track-card" data-track="ass-boost-party-anthem">
+            <div class="track-artwork"></div>
+            <div class="track-info">
+              <h3>Ass Boost Party Anthem</h3>
+              <p>Feat. VD Capital. AI ass empire. Digital paid.</p>
+              <a href="#" class="track-play">▶ Play</a>
+            </div>
+          </article>
+          <article class="track-card" data-track="scam-and-shake">
+            <div class="track-artwork"></div>
+            <div class="track-info">
+              <h3>Scam and Shake</h3>
+              <p>Street anthem. Move different. Get it how you live.</p>
+              <a href="#" class="track-play">▶ Play</a>
+            </div>
+          </article>
+          <article class="track-card">
+            <div class="track-artwork"></div>
+            <div class="track-info">
+              <h3>Hard Strip Club / Booty Contest Flow</h3>
+              <p>Club banger. Stage ready. Certified.</p>
+              <a href="#" class="track-play">▶ Play</a>
+            </div>
+          </article>
+        </div>
+
+        <div class="press-kit">
+          <a href="#" class="btn-secondary">Download Press Kit</a>
+          <a href="#" class="btn-secondary">Stems & Beats</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Videos Section -->
+    <section id="videos" class="section videos-section">
+      <div class="container">
+        <h2 class="section-title">Videos</h2>
+        <p class="section-intro">Visual hype. Booty-shaking clips from the club.</p>
+        
+        <div class="videos-grid">
+          <div class="video-card">
+            <div class="video-thumb">
+              <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="Bootyquake Visual" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+            <p>Bootyquake Radio Teaser</p>
+          </div>
+          <div class="video-card">
+            <div class="video-thumb">
+              <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="Bootyquake Visual 2" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+            <p>Club Vibes Short</p>
+          </div>
+          <div class="video-card">
+            <div class="video-thumb">
+              <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="Bootyquake Visual 3" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+            <p>Twerk Anthem Visual</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Events Section -->
+    <section id="events" class="section events-section">
+      <div class="container">
+        <h2 class="section-title">Events</h2>
+        <p class="section-intro">We're turning up the heat. Live sets, twerk battles, AI art drops — come quake with us.</p>
+        
+        <div class="events-content">
+          <div class="events-hero">
+            <h3>Ignite the Party. Fuel the Future.</h3>
+            <p>BootyQuake Official is crashing live events where <strong>you</strong> play our AI-crafted bangers. Twerk to <em>Bootyquake Chronicles</em>, feel the bass quake, and watch the crowd unite in pure, unfiltered fun.</p>
+            <p>We're amplifying AI creativity while bringing people together through rhythm and movement. From Sacramento to the globe — dance, connect, and celebrate the future of music.</p>
+          </div>
+          <div class="events-cta">
+            <h4>Join the Quake</h4>
+            <ul>
+              <li><strong>Host your own Bootyquake Bash</strong> — Spin our clean radio edits (zero profanity, all fire) and tag <a href="https://instagram.com/bootyquakeofficial" target="_blank" rel="noopener">@bootyquakeofficial</a> for features.</li>
+              <li><strong>Show up to ours</strong> — Live DJ sets, twerk battles, AI art drops. Fun for all, energy for everyone.</li>
+              <li><strong>Support the wave</strong> — Stream on Spotify, share your party clips, and build the AI music revolution with us.</li>
+            </ul>
+          </div>
+          <p class="events-disclaimer">All BootyQuake beats, visuals, and enhancements are 100% AI-powered for entertainment and inspiration. Creative, legal, and lit.</p>
+          <p class="events-tagline">BootyQuake Official — Quake the Party. Create the Future.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- EPK Section -->
+    <section id="epk" class="section epk-section">
+      <div class="container">
+        <h2 class="section-title">Electronic Press Kit</h2>
+        <p class="section-intro">Bio, photos & press for booking & media outreach.</p>
+        
+        <div class="epk-grid">
+          <div class="epk-bio">
+            <h3>About BootyQuake</h3>
+            <p>At BootyQuake Official, we celebrate movement, rhythm, and togetherness. Dancing and music are our universal language — when the beat drops, judgment disappears and energy takes over. Twerking isn't just a move — it's confidence, freedom, and fun in motion.</p>
+            <p>Our sounds and AI-enhanced beats are designed for entertainment, community, and creative inspiration. <strong>BootyQuake Official</strong> — move how you feel, vibe how you live.</p>
+            <p><a href="https://instagram.com/bootyquakeofficial" target="_blank" rel="noopener">@bootyquakeofficial</a></p>
+            <blockquote>"The sound that makes the floor shake."</blockquote>
+          </div>
+          <div class="epk-photos">
+            <div class="epk-photo"></div>
+            <div class="epk-photo"></div>
+            <div class="epk-photo"></div>
+          </div>
+        </div>
+        <a href="#" class="btn-secondary">Download Full EPK (Hi-Res)</a>
+      </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="section about-section">
+      <div class="container">
+        <h2 class="section-title">About</h2>
+        <div class="about-content">
+          <div class="about-text">
+            <p>At BootyQuake Official, we celebrate movement, rhythm, and togetherness. Dancing and music have always been our universal language — the heartbeat that connects every culture. When the beat drops, judgment disappears and energy takes over. From body rolls to basslines, we move as one.</p>
+            <p>Twerking isn't just a move — it's an attitude. It's confidence, freedom, and fun in motion. We bring that energy to every party, amplifying the vibe and turning simple gatherings into unforgettable moments of shared rhythm. The mission? Pure joy, pure connection, pure movement.</p>
+            <p>All the sounds, visuals, and AI-enhanced beats we share are designed for entertainment, community, and creative inspiration. Our music and videos are powered by AI innovation — built to make you move, laugh, and live in the moment.</p>
+            <p class="about-tagline"><strong>BootyQuake Official</strong> — move how you feel, vibe how you live.</p>
+            <p class="about-social">Follow us <a href="https://instagram.com/bootyquakeofficial" target="_blank" rel="noopener">@bootyquakeofficial</a> on Instagram.</p>
+          </div>
+          <div class="testimonials">
+            <blockquote>"BootyQuake hits different. Every track is a banger."</blockquote>
+            <blockquote>"The go-to for club nights. Period."</blockquote>
+            <blockquote>"Hustle music. Real talk. No cap."</blockquote>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Store Section -->
+    <section id="store" class="section store-section">
+      <div class="container">
+        <h2 class="section-title">Store</h2>
+        <p class="section-intro">Beats, stems & merch. Commission-free.</p>
+        
+        <div class="store-grid">
+          <article class="store-item">
+            <div class="store-image"></div>
+            <h3>Beat Packs</h3>
+            <p>Exclusive stems & instrumentals</p>
+            <a href="#" class="btn-secondary">Shop Beats</a>
+          </article>
+          <article class="store-item">
+            <div class="store-image"></div>
+            <h3>T-Shirts</h3>
+            <p>Official BootyQuake merch</p>
+            <a href="#" class="btn-secondary">Shop Merch</a>
+          </article>
+          <article class="store-item">
+            <div class="store-image store-distrokid"></div>
+            <h3>Get on Spotify</h3>
+            <p>Distribute your music to Spotify, Apple, Amazon & more</p>
+            <a href="https://distrokid.com/vip/seven/12172379" target="_blank" rel="noopener" class="btn-secondary">DistroKid →</a>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="section contact-section">
+      <div class="container">
+        <h2 class="section-title">Contact</h2>
+        <p class="section-intro">Bookings, collabs & drops. Stay connected.</p>
+        
+        <form class="contact-form">
+          <input type="text" name="name" placeholder="Name" required>
+          <input type="email" name="email" placeholder="Email" required>
+          <textarea name="message" placeholder="Message" rows="4" required></textarea>
+          <button type="submit" class="cta-primary">Send</button>
+        </form>
+
+        <div class="newsletter">
+          <h3>Get Drops</h3>
+          <p>New tracks, exclusives & updates.</p>
+          <form class="newsletter-form">
+            <input type="email" placeholder="Your email" required>
+            <button type="submit">Subscribe</button>
+          </form>
+        </div>
+
+        <div class="contact-links">
+          <a href="mailto:hello@bootyquakeofficial.com">hello@bootyquakeofficial.com</a>
+          <a href="https://instagram.com/bootyquakeofficial" target="_blank" rel="noopener">@bootyquakeofficial</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-content">
+      <a href="#home" class="logo">BOOTYQUAKE</a>
+      <div class="footer-social">
+        <a href="https://instagram.com/bootyquakeofficial" target="_blank" rel="noopener" aria-label="Instagram">IG</a>
+        <a href="https://tiktok.com/@bootyquakeofficial" target="_blank" rel="noopener" aria-label="TikTok">TikTok</a>
+        <a href="https://youtube.com/@bootyquakeofficial" target="_blank" rel="noopener" aria-label="YouTube">YouTube</a>
+        <a href="https://open.spotify.com/artist/bootyquakeofficial" target="_blank" rel="noopener" aria-label="Spotify">Spotify</a>
+      </div>
+      <p class="footer-copy">© 2025 BootyQuake Official. Move how you feel, vibe how you live. <a href="https://instagram.com/bootyquakeofficial" target="_blank" rel="noopener">@bootyquakeofficial</a> · <a href="https://distrokid.com/vip/seven/12172379" target="_blank" rel="noopener">Distribute your music</a></p>
+    </div>
+  </footer>
+
+  <script src="./script.js"></script>
+</body>
+</html>
