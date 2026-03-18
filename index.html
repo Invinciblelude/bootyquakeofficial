@@ -89,47 +89,28 @@
               <div class="video-player-wrap" id="hub-video-wrap">
                 <div id="yt-player"></div>
                 <div class="video-more-mask" aria-hidden="true"></div>
-                <div class="video-click-capture" id="video-click-capture" aria-hidden="true" title="Click to play/pause — switch videos via Hit Music Videos on the right"></div>
+                <div class="video-click-capture" id="video-click-capture" aria-hidden="true" title="Click to play/pause video"></div>
                 <div class="video-main-placeholder" id="video-main-placeholder">
                   <img src="./hero-album-art.png" alt="BootyQuake" class="video-placeholder-logo">
                   <span class="video-placeholder-hint">Pick a track + video to mash</span>
                 </div>
               </div>
-              <div class="hub-cta-bar hub-cta-bar-visible" id="hub-cta-bar">
-              <div class="hub-cta-controls">
-                <span class="hub-cta-track">Block Party Bootyquake</span>
-              </div>
-              <div class="hub-control-block hub-control-block-video">
-                <h4 class="hub-control-title">Video</h4>
-                <div class="hub-control-row">
-                  <button type="button" class="hub-cta-play hub-cta-play-sm" id="video-play-pause" aria-label="Play video">▶</button>
-                  <span class="hub-cta-time" id="video-time">0:00 / 0:00</span>
-                </div>
-                <div class="hub-seek-row">
-                  <div class="hub-seek-bar" id="video-seek-bar" role="slider" aria-label="Seek video" tabindex="0" title="Click or drag to move video">
-                    <div class="hub-seek-fill" id="video-seek-fill"></div>
-                    <div class="hub-seek-thumb" id="video-seek-thumb"></div>
-                  </div>
-                </div>
-              </div>
-              <div class="hub-control-block hub-control-block-audio">
-                <h4 class="hub-control-title">Song</h4>
-                <div class="hub-control-row">
-                  <button type="button" class="hub-cta-play hub-cta-play-sm" id="audio-play-pause" aria-label="Play song">▶</button>
+              <div class="hub-song-bar" id="hub-cta-bar">
+                <div class="hub-song-controls">
+                  <button type="button" class="hub-cta-play hub-cta-play-sm" id="audio-play-pause" aria-label="Play">▶</button>
+                  <span class="hub-cta-track">Block Party Bootyquake</span>
                   <span class="hub-cta-time" id="audio-time">0:00 / 0:00</span>
                 </div>
                 <div class="hub-seek-row">
-                  <div class="hub-seek-bar" id="audio-seek-bar" role="slider" aria-label="Seek song" tabindex="0" title="Click or drag to move song">
+                  <div class="hub-seek-bar" id="audio-seek-bar" role="slider" aria-label="Seek" tabindex="0" title="Click or drag to move">
                     <div class="hub-seek-fill" id="audio-seek-fill"></div>
                     <div class="hub-seek-thumb" id="audio-seek-thumb"></div>
                   </div>
                 </div>
+                <div class="hub-lyrics-inline" id="karaoke-container">
+                  <div class="karaoke-lyrics" id="karaoke-lyrics" aria-live="polite">Pick a track and play to see lyrics</div>
+                </div>
               </div>
-            </div>
-            </div>
-            <div class="karaoke-container" id="karaoke-container">
-              <p class="karaoke-label">Lyrics</p>
-              <div class="karaoke-lyrics" id="karaoke-lyrics" aria-live="polite">Pick a track and play to see lyrics</div>
             </div>
           </div>
 

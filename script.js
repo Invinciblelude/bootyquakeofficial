@@ -3,6 +3,28 @@
  */
 document.addEventListener('DOMContentLoaded', () => {
   try {
+  // Remove VIDEO control block – keep only one bar (song + lyrics)
+  function removeVideoBar() {
+    const videoEl = document.getElementById('video-play-pause') || document.getElementById('video-seek-bar') || document.getElementById('video-time');
+    let videoBar = videoEl?.closest('.hub-control-block');
+    if (!videoBar) {
+      const embed = document.querySelector('.hub-player-embed');
+      const blocks = embed?.querySelectorAll('.hub-control-block') || [];
+      for (const block of blocks) {
+        const label = block.querySelector('[class*="title"], [class*="label"]');
+        if (label && /^\s*VIDEO\s*$/i.test(label.textContent)) {
+          videoBar = block;
+          break;
+        }
+      }
+      if (!videoBar && blocks[0]) videoBar = blocks[0];
+    }
+    videoBar?.remove();
+  }
+  removeVideoBar();
+  setTimeout(removeVideoBar, 100);
+  setTimeout(removeVideoBar, 500);
+
   const header = document.querySelector('.header');
   const menuToggle = document.querySelector('.menu-toggle');
   const nav = document.querySelector('.nav');
@@ -105,11 +127,6 @@ document.addEventListener('DOMContentLoaded', () => {
     function onYtStateChange(event) {
       window.__ytPlayerState = event.data;
       if (event.data === 1) ensureMuted();
-      const videoBtn = document.getElementById('video-play-pause');
-      if (videoBtn) {
-        videoBtn.setAttribute('aria-label', event.data === 1 ? 'Pause video' : 'Play video');
-        videoBtn.textContent = event.data === 1 ? '⏸' : '▶';
-      }
     }
 
     function loadYtVideo(videoId) {
@@ -134,7 +151,9 @@ document.addEventListener('DOMContentLoaded', () => {
               enablejsapi: 1,
               origin: window.location.origin,
               playsinline: 1,
-              fs: 1
+              fs: 1,
+              controls: 0,
+              disablekb: 1
             },
             events: {
               onStateChange: onYtStateChange,
@@ -203,7 +222,6 @@ document.addEventListener('DOMContentLoaded', () => {
             { src: './audio/ass-boost-party-anthem.mp3', title: 'Ass Boost Party Anthem', id: 'ass-boost-party-anthem' }
           ];
           const audio = document.getElementById('bootyquake-audio');
-          const videoPlayBtn = document.getElementById('video-play-pause');
           const audioPlayBtn = document.getElementById('audio-play-pause');
           videos.forEach((v, videoIndex) => {
             const videoId = v.platform === 'youtube' ? getYoutubeId(v.url) : null;
@@ -236,8 +254,6 @@ document.addEventListener('DOMContentLoaded', () => {
                   const loadTrack = window.__bootyquakeLoadTrack;
                   if (loadTrack) loadTrack(idx);
                   audio.play().catch(() => {});
-                  videoPlayBtn?.setAttribute('aria-label', 'Pause video');
-                  videoPlayBtn && (videoPlayBtn.textContent = '⏸');
                   audioPlayBtn?.setAttribute('aria-label', 'Pause');
                   audioPlayBtn && (audioPlayBtn.textContent = '⏸');
                   document.getElementById('hub-cta-bar')?.classList.add('playing');
@@ -1609,11 +1625,9 @@ document.addEventListener('DOMContentLoaded', () => {
   ];
   let currentTrack = 0;
   const audio = document.getElementById('bootyquake-audio');
-  const videoPlayBtn = document.getElementById('video-play-pause');
   const audioPlayBtn = document.getElementById('audio-play-pause');
   const trackDisplay = document.querySelector('.hub-cta-track');
   const audioTimeDisplay = document.getElementById('audio-time');
-  const videoTimeDisplay = document.getElementById('video-time');
 
   const karaokeContainer = document.getElementById('karaoke-container');
   const karaokeLyrics = document.getElementById('karaoke-lyrics');
@@ -1681,38 +1695,19 @@ document.addEventListener('DOMContentLoaded', () => {
     return m + ':' + (s < 10 ? '0' : '') + s;
   }
 
-  // Lyrics slide left-to-right at 120 BPM
-  const BPM = 120;
-  const PX_PER_BEAT = 100;
-  const MS_PER_BEAT = 60000 / BPM;
-  const SCROLL_SPEED_PX_PER_SEC = PX_PER_BEAT / (MS_PER_BEAT / 1000);
-
-  let lastKaraokeTime = 0;
-  let lyricsRafId = null;
-  function updateLyricsScroll() {
-    if (!karaokeLyrics || !karaokeContainer?.classList.contains('visible') || !audio || audio.paused) {
-      lastKaraokeTime = 0;
-      return;
-    }
+  // Scroll lyrics so the active line (by data-time) stays in view
+  function scrollToActiveLyric(lines, idx) {
+    if (!karaokeLyrics || !lines.length || idx < 0) return;
+    const activeEl = lines[idx];
     const maxScroll = Math.max(0, karaokeLyrics.scrollWidth - karaokeLyrics.clientWidth);
     if (maxScroll <= 0) return;
-    const now = performance.now() / 1000;
-    if (lastKaraokeTime === 0) lastKaraokeTime = now;
-    const delta = now - lastKaraokeTime;
-    lastKaraokeTime = now;
-    karaokeLyrics.scrollLeft = Math.min(maxScroll, karaokeLyrics.scrollLeft + SCROLL_SPEED_PX_PER_SEC * delta);
-    lyricsRafId = requestAnimationFrame(updateLyricsScroll);
+    // Center active lyric in view
+    const targetScroll = activeEl.offsetLeft - (karaokeLyrics.clientWidth / 2) + (activeEl.offsetWidth / 2);
+    karaokeLyrics.scrollLeft = Math.max(0, Math.min(maxScroll, targetScroll));
   }
+
   function updateTime() {
     if (audioTimeDisplay && audio) audioTimeDisplay.textContent = formatTime(audio.currentTime) + ' / ' + formatTime(audio.duration);
-    try {
-      const yt = window.__ytPlayer;
-      if (videoTimeDisplay && yt?.getCurrentTime) {
-        const vt = yt.getCurrentTime();
-        const vd = yt.getDuration?.() ?? 0;
-        videoTimeDisplay.textContent = formatTime(vt) + ' / ' + formatTime(vd);
-      }
-    } catch (_) {}
     if (karaokeLyrics && karaokeContainer?.classList.contains('visible')) {
       const lines = karaokeLyrics.querySelectorAll('.karaoke-line[data-time]');
       if (lines.length) {
@@ -1723,30 +1718,25 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         if (idx < 0) idx = 0;
         lines.forEach((el, i) => el.classList.toggle('active', i === idx));
-        if (audio && !audio.paused) {
-          if (!lyricsRafId) lyricsRafId = requestAnimationFrame(updateLyricsScroll);
-        } else {
-          if (lyricsRafId) cancelAnimationFrame(lyricsRafId);
-          lyricsRafId = null;
-          lastKaraokeTime = 0;
-        }
+        scrollToActiveLyric(lines, idx);
       }
-    } else {
-      if (lyricsRafId) cancelAnimationFrame(lyricsRafId);
-      lyricsRafId = null;
-      lastKaraokeTime = 0;
     }
   }
 
-  // Sync lyrics scroll when user seeks (jump to correct position)
+  // Sync lyrics scroll when user seeks
   if (audio) {
     audio.addEventListener('seeking', () => {
-      lastKaraokeTime = 0;
       if (karaokeLyrics && karaokeContainer?.classList.contains('visible')) {
-        const maxScroll = Math.max(0, karaokeLyrics.scrollWidth - karaokeLyrics.clientWidth);
-        const dur = audio.duration;
-        if (isFinite(dur) && dur > 0 && maxScroll > 0) {
-          karaokeLyrics.scrollLeft = (audio.currentTime / dur) * maxScroll;
+        const lines = karaokeLyrics.querySelectorAll('.karaoke-line[data-time]');
+        if (lines.length) {
+          const t = audio?.currentTime ?? 0;
+          let idx = -1;
+          for (let i = lines.length - 1; i >= 0; i--) {
+            if (Number(lines[i].dataset.time) <= t) { idx = i; break; }
+          }
+          if (idx < 0) idx = 0;
+          lines.forEach((el, i) => el.classList.toggle('active', i === idx));
+          scrollToActiveLyric(lines, idx);
         }
       }
     });
@@ -1777,46 +1767,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Video seek bar – independent control
-  const videoSeekBar = document.getElementById('video-seek-bar');
-  const videoSeekFill = document.getElementById('video-seek-fill');
-  const videoSeekThumb = document.getElementById('video-seek-thumb');
-
-  function updateVideoSeekBar() {
-    if (videoSeekDragRef.dragging) return;
-    if (performance.now() - lastVideoSeekTime < 800) return;
-    try {
-      const yt = window.__ytPlayer;
-      if (!videoSeekFill || !yt?.getDuration) return;
-      const dur = yt.getDuration();
-      if (!isFinite(dur) || dur <= 0) return;
-      const vt = yt.getCurrentTime();
-      const pct = (vt / dur) * 100;
-      videoSeekFill.style.width = pct + '%';
-      if (videoSeekThumb) videoSeekThumb.style.left = pct + '%';
-      videoSeekBar?.setAttribute('aria-valuenow', Math.round(pct));
-    } catch (_) {}
-  }
-
-  let lastVideoSeekTime = 0;
-  function seekVideoTo(frac) {
-    try {
-      const yt = window.__ytPlayer;
-      if (!yt?.seekTo) return;
-      const dur = yt.getDuration?.() ?? 0;
-      if (!isFinite(dur) || dur <= 0) return;
-      const t = Math.max(0, Math.min(1, frac)) * dur;
-      yt.seekTo(t, true);
-      lastVideoSeekTime = performance.now();
-      if (videoSeekFill) {
-        const pct = frac * 100;
-        videoSeekFill.style.width = pct + '%';
-        if (videoSeekThumb) videoSeekThumb.style.left = pct + '%';
-      }
-    } catch (_) {}
-  }
-
-  const videoSeekDragRef = { dragging: false };
   const audioSeekDragRef = { dragging: false };
 
   function setupSeekBar(bar, fill, thumb, getDur, getCur, seekFn, updateFn, dragRef) {
@@ -1875,21 +1825,11 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   setupSeekBar(
-    videoSeekBar, videoSeekFill, videoSeekThumb,
-    () => { try { return window.__ytPlayer?.getDuration?.() ?? 0; } catch (_) { return 0; } },
-    () => { try { return window.__ytPlayer?.getCurrentTime?.() ?? 0; } catch (_) { return 0; } },
-    seekVideoTo, updateVideoSeekBar, videoSeekDragRef
-  );
-
-  setupSeekBar(
     audioSeekBar, audioSeekFill, audioSeekThumb,
     () => audio?.duration ?? 0,
     () => audio?.currentTime ?? 0,
     seekAudioTo, updateAudioSeekBar, audioSeekDragRef
   );
-
-  // Poll video seek bar when YT player is active
-  setInterval(updateVideoSeekBar, 500);
 
   function playBootyquake() {
     document.getElementById('music')?.scrollIntoView({ behavior: 'smooth' });
@@ -1899,8 +1839,6 @@ document.addEventListener('DOMContentLoaded', () => {
       audioPlayBtn?.setAttribute('aria-label', 'Pause');
       audioPlayBtn && (audioPlayBtn.textContent = '⏸');
       try { window.__ytPlayer?.playVideo?.(); } catch (_) {}
-      videoPlayBtn?.setAttribute('aria-label', 'Pause video');
-      videoPlayBtn && (videoPlayBtn.textContent = '⏸');
       document.getElementById('hub-cta-bar')?.classList.add('playing');
     }
   }
@@ -1910,24 +1848,6 @@ document.addEventListener('DOMContentLoaded', () => {
   function showPlayingState() {
     document.getElementById('hub-cta-bar')?.classList.add('playing');
   }
-
-  videoPlayBtn?.addEventListener('click', (e) => {
-    e.stopPropagation();
-    try {
-      const yt = window.__ytPlayer;
-      if (!yt?.getPlayerState) return;
-      const s = yt.getPlayerState();
-      if (s === 1) {
-        yt.pauseVideo?.();
-        videoPlayBtn.setAttribute('aria-label', 'Play video');
-        videoPlayBtn.textContent = '▶';
-      } else {
-        yt.playVideo?.();
-        videoPlayBtn.setAttribute('aria-label', 'Pause video');
-        videoPlayBtn.textContent = '⏸';
-      }
-    } catch (_) {}
-  });
 
   audioPlayBtn?.addEventListener('click', (e) => {
     e.stopPropagation();
@@ -1956,8 +1876,6 @@ document.addEventListener('DOMContentLoaded', () => {
           audio.play().catch(() => {});
           audioPlayBtn?.setAttribute('aria-label', 'Pause');
           audioPlayBtn && (audioPlayBtn.textContent = '⏸');
-          videoPlayBtn?.setAttribute('aria-label', 'Pause video');
-          videoPlayBtn && (videoPlayBtn.textContent = '⏸');
           document.querySelectorAll('.track-list-item').forEach(el => el.classList.remove('active'));
           btn.classList.add('active');
           showPlayingState();

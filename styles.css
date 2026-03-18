@@ -3,6 +3,14 @@
    Deep reds, blacks, golds
    ============================================ */
 
+/* Force-hide VIDEO control block – only one control bar (song + lyrics) */
+.hub-control-block:has(#video-play-pause),
+.hub-control-block:has(#video-seek-bar),
+.hub-control-block:has(#video-time),
+.hub-player-embed .hub-control-block:first-of-type {
+  display: none !important;
+}
+
 :root {
   --black: #0a0a0a;
   --black-soft: #141414;
@@ -373,30 +381,6 @@ button.cta-primary {
   box-shadow: none;
 }
 
-.hub-control-block {
-  width: 100%;
-  display: flex !important;
-  flex-direction: column;
-  gap: 0.25rem;
-  padding: 0.35rem 0.5rem;
-  background: rgba(0,0,0,0.25);
-  border-radius: 4px;
-  border: 1px solid rgba(196, 30, 58, 0.2);
-}
-
-.hub-control-block + .hub-control-block {
-  margin-top: 0.25rem;
-}
-
-.hub-control-title {
-  font-size: 0.65rem;
-  font-weight: 600;
-  color: var(--gold);
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  margin: 0 0 0.1rem 0;
-}
-
 .hub-seek-row {
   width: 100%;
   min-height: 18px;
@@ -425,35 +409,12 @@ button.cta-primary {
   min-width: 0;
 }
 
-.hub-control-row {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  width: 100%;
-  flex-shrink: 0;
-  min-height: 28px;
-}
-
-.hub-control-label {
-  font-size: 0.7rem;
-  font-weight: 600;
-  color: var(--gold);
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  min-width: 3rem;
-}
-
-.hub-control-row .hub-cta-time {
-  font-size: 0.7rem;
-  flex-shrink: 0;
-  min-width: 3.5rem;
-}
-
 .hub-cta-bar-visible .hub-cta-time {
   font-size: 0.75rem;
   flex-shrink: 0;
 }
 
+.hub-song-bar .hub-seek-bar,
 .hub-cta-bar-visible .hub-seek-bar {
   height: 6px;
   min-height: 6px;
@@ -462,15 +423,18 @@ button.cta-primary {
   border: 1px solid rgba(196, 30, 58, 0.25);
 }
 
+.hub-song-bar .hub-seek-bar:hover,
 .hub-cta-bar-visible .hub-seek-bar:hover {
   background: rgba(255,255,255,0.3);
 }
 
+.hub-song-bar .hub-seek-fill,
 .hub-cta-bar-visible .hub-seek-fill {
   border-radius: 3px 0 0 3px;
   background: var(--red-neon);
 }
 
+.hub-song-bar .hub-seek-thumb,
 .hub-cta-bar-visible .hub-seek-thumb {
   width: 10px;
   height: 10px;
@@ -713,15 +677,56 @@ button.cta-primary {
   font-size: 0.9rem;
 }
 
-.karaoke-container {
+/* Song bar: controls + lyrics – invisible until hover (desktop) */
+.hub-song-bar {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
   padding: 0.5rem 0.75rem;
   background: rgba(0,0,0,0.5);
-  border-radius: 6px;
-  border: 1px solid rgba(196,30,58,0.2);
+  border: none;
+  transition: opacity 0.2s ease;
+}
+
+@media (hover: hover) {
+  .hub-song-bar {
+    opacity: 0;
+  }
+  .hub-player-embed:hover .hub-song-bar {
+    opacity: 1;
+  }
+}
+
+@media (hover: none) {
+  .hub-song-bar {
+    opacity: 1;
+  }
+}
+
+.hub-song-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.hub-song-controls .hub-cta-track {
+  flex: 1;
+  font-size: 0.8rem;
+  min-width: 0;
+}
+
+.hub-song-controls .hub-cta-time {
+  font-size: 0.75rem;
+  flex-shrink: 0;
+}
+
+.hub-lyrics-inline {
+  padding: 0.25rem 0;
+  min-height: 2rem;
   display: block;
 }
 
-.karaoke-container:not(.visible) .karaoke-lyrics {
+.hub-lyrics-inline:not(.visible) .karaoke-lyrics {
   color: var(--gray);
   font-style: italic;
 }
@@ -831,8 +836,6 @@ button.cta-primary {
   background: var(--black-elevated);
   border-radius: 8px;
   overflow: hidden;
-  border: 1px solid rgba(196,30,58,0.3);
-  box-shadow: 0 4px 20px rgba(0,0,0,0.4);
 }
 
 .video-player-wrap {
@@ -841,8 +844,6 @@ button.cta-primary {
   background: var(--black-elevated);
   border-radius: 0;
   overflow: hidden;
-  border: none;
-  border-bottom: 1px solid rgba(196,30,58,0.2);
 }
 
 .video-player-wrap iframe,
@@ -868,14 +869,14 @@ button.cta-primary {
   display: none;
 }
 
-/* Hides YouTube "More videos" carousel so users aren't confused by unclickable thumbnails */
+/* Hides YouTube controls bar and "More videos" carousel */
 .video-player-wrap.has-video .video-more-mask {
   position: absolute;
   bottom: 0;
   left: 0;
   right: 0;
-  height: 40%;
-  background: linear-gradient(to top, var(--black) 0%, transparent 100%);
+  height: 45%;
+  background: linear-gradient(to top, var(--black) 0%, var(--black) 80px, transparent 100%);
   z-index: 9;
   pointer-events: none;
 }
@@ -1526,6 +1527,7 @@ button.cta-primary {
     border-radius: 6px;
   }
 
+  .hub-lyrics-inline,
   .karaoke-container {
     max-height: 120px;
   }
