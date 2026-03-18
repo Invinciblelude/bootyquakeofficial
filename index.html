@@ -30,7 +30,7 @@
     </nav>
     <div class="social-header">
       <a href="https://www.instagram.com/bootyquakeofficial" target="_blank" rel="noopener" aria-label="Instagram">IG</a>
-      <a href="https://www.tiktok.com/@bootyquakeofficial" target="_blank" rel="noopener" aria-label="TikTok">TikTok</a>
+      <a href="https://www.tiktok.com/@bootyquakeofficia" target="_blank" rel="noopener" aria-label="TikTok">TikTok</a>
       <a href="https://youtube.com/@bootyquakeofficial" target="_blank" rel="noopener" aria-label="YouTube">YT</a>
       <a href="https://open.spotify.com/artist/bootyquakeofficial" target="_blank" rel="noopener" aria-label="Spotify">Spotify</a>
     </div>
@@ -40,26 +40,8 @@
   </header>
 
   <main>
-    <!-- Hero Section -->
-    <section id="home" class="hero">
-      <div class="hero-media">
-        <div class="hero-image"></div>
-        <div class="hero-overlay"></div>
-      </div>
-      <div class="hero-content">
-        <span class="hero-badge">Bootyquake Chronicles</span>
-        <h1 class="hero-title">Twerking for Dancers & Clubs</h1>
-        <p class="hero-subtitle">Move how you feel, vibe how you live. 22 tracks. Pure joy, pure connection, pure movement.</p>
-        <button type="button" class="cta-primary" id="play-bootyquake">Play Bootyquake Radio</button>
-      </div>
-      <div class="hero-scroll">
-        <span>Scroll</span>
-        <div class="scroll-line"></div>
-      </div>
-    </section>
-
-    <!-- Music + Videos Hub: tracks left | video + karaoke center | hit videos right -->
-    <section id="music" class="section hub-section">
+    <!-- Music + Videos Hub: loads first, tracks left | video + karaoke center | hit videos right -->
+    <section id="music" class="section hub-section hub-section-first">
       <div class="container container-full">
         <div class="hub-header">
           <h2 class="section-title section-title-center">Music</h2>
@@ -74,7 +56,6 @@
               <button type="button" class="track-list-item" data-track="block-party-bootyquake">Block Party Bootyquake</button>
               <button type="button" class="track-list-item" data-track="neon-thong-vision">Neon Thong Vision</button>
               <button type="button" class="track-list-item" data-track="queens-of-the-shakes">Queen of the Quake</button>
-              <button type="button" class="track-list-item" data-track="big-booty-hustle">Big Booty Hustle</button>
               <button type="button" class="track-list-item" data-track="bounce-back-booty">Bounce Back Booty</button>
               <button type="button" class="track-list-item" data-track="scam-and-shake">Scam and Shake</button>
               <button type="button" class="track-list-item" data-track="strip-to-the-top">Strip to the Top</button>
@@ -99,11 +80,13 @@
             </div>
           </aside>
 
-          <!-- Center: Video + CTA + Karaoke -->
+          <!-- Center: Video embed + CTA + Karaoke (videos play on-site, no redirect) -->
           <div class="hub-center">
             <audio id="bootyquake-audio" preload="metadata"></audio>
             <div class="video-player-wrap" id="hub-video-wrap">
               <div id="yt-player"></div>
+              <div class="video-more-mask" aria-hidden="true"></div>
+              <div class="video-click-capture" id="video-click-capture" aria-hidden="true" title="Click to play/pause — switch videos via Hit Music Videos on the right"></div>
               <div class="video-main-placeholder" id="video-main-placeholder">
                 <img src="./hero-album-art.png" alt="BootyQuake" class="video-placeholder-logo">
                 <span class="video-placeholder-hint">Pick a track + video to mash</span>
@@ -121,7 +104,7 @@
             </div>
           </div>
 
-          <!-- Right: Hit video thumbnails -->
+          <!-- Right: Hit video thumbnails (click to play in embed, no redirect) -->
           <aside class="hub-videos">
             <p class="video-list-label">Hit Music Videos</p>
             <div class="video-thumbnails" id="video-thumbnails">
@@ -147,7 +130,7 @@
           <div class="events-cta">
             <h4>Join the Quake</h4>
             <ul>
-              <li><strong>Host your own Bootyquake Bash</strong> — Spin our clean radio edits (zero profanity, all fire) and tag <a href="https://www.instagram.com/bootyquakeofficial" target="_blank" rel="noopener">@bootyquakeofficial</a> or <a href="https://www.tiktok.com/@bootyquakeofficial" target="_blank" rel="noopener">TikTok</a> for features.</li>
+              <li><strong>Host your own Bootyquake Bash</strong> — Spin our clean radio edits (zero profanity, all fire) and tag <a href="https://www.instagram.com/bootyquakeofficial" target="_blank" rel="noopener">@bootyquakeofficial</a> or <a href="https://www.tiktok.com/@bootyquakeofficia" target="_blank" rel="noopener">TikTok</a> for features.</li>
               <li><strong>Show up to ours</strong> — Live DJ sets, twerk battles, AI art drops. Fun for all, energy for everyone.</li>
               <li><strong>Support the wave</strong> — Stream on Spotify, share your party clips, and build the AI music revolution with us.</li>
             </ul>
@@ -169,7 +152,7 @@
             <h3>About BootyQuake</h3>
             <p>At BootyQuake Official, we celebrate movement, rhythm, and togetherness. Dancing and music are our universal language — when the beat drops, judgment disappears and energy takes over. Twerking isn't just a move — it's confidence, freedom, and fun in motion.</p>
             <p>Our sounds and AI-enhanced beats are designed for entertainment, community, and creative inspiration. <strong>BootyQuake Official</strong> — move how you feel, vibe how you live.</p>
-            <p><a href="https://www.instagram.com/bootyquakeofficial" target="_blank" rel="noopener">@bootyquakeofficial</a> · <a href="https://www.tiktok.com/@bootyquakeofficial" target="_blank" rel="noopener">TikTok</a></p>
+            <p><a href="https://www.instagram.com/bootyquakeofficial" target="_blank" rel="noopener">@bootyquakeofficial</a> · <a href="https://www.tiktok.com/@bootyquakeofficia" target="_blank" rel="noopener">TikTok</a></p>
             <blockquote>"The sound that makes the floor shake."</blockquote>
           </div>
           <div class="epk-photos">
@@ -192,7 +175,7 @@
             <p>Twerking isn't just a move — it's an attitude. It's confidence, freedom, and fun in motion. We bring that energy to every party, amplifying the vibe and turning simple gatherings into unforgettable moments of shared rhythm. The mission? Pure joy, pure connection, pure movement.</p>
             <p>All the sounds, visuals, and AI-enhanced beats we share are designed for entertainment, community, and creative inspiration. Our music and videos are powered by AI innovation — built to make you move, laugh, and live in the moment.</p>
             <p class="about-tagline"><strong>BootyQuake Official</strong> — move how you feel, vibe how you live.</p>
-            <p class="about-social">Follow us <a href="https://www.instagram.com/bootyquakeofficial" target="_blank" rel="noopener">@bootyquakeofficial</a> on Instagram and <a href="https://www.tiktok.com/@bootyquakeofficial" target="_blank" rel="noopener">TikTok</a>.</p>
+            <p class="about-social">Follow us <a href="https://www.instagram.com/bootyquakeofficial" target="_blank" rel="noopener">@bootyquakeofficial</a> on Instagram and <a href="https://www.tiktok.com/@bootyquakeofficia" target="_blank" rel="noopener">TikTok</a>.</p>
           </div>
           <div class="testimonials">
             <blockquote>"BootyQuake hits different. Every track is a banger."</blockquote>
@@ -257,8 +240,26 @@
         <div class="contact-links">
           <a href="mailto:hello@bootyquakeofficial.com">hello@bootyquakeofficial.com</a>
           <a href="https://www.instagram.com/bootyquakeofficial" target="_blank" rel="noopener">@bootyquakeofficial</a>
-          <a href="https://www.tiktok.com/@bootyquakeofficial" target="_blank" rel="noopener">TikTok</a>
+          <a href="https://www.tiktok.com/@bootyquakeofficia" target="_blank" rel="noopener">TikTok</a>
         </div>
+      </div>
+    </section>
+
+    <!-- Hero / Landing (click logo to scroll here) -->
+    <section id="home" class="hero">
+      <div class="hero-media">
+        <div class="hero-image"></div>
+        <div class="hero-overlay"></div>
+      </div>
+      <div class="hero-content">
+        <span class="hero-badge">Bootyquake Chronicles</span>
+        <h1 class="hero-title">Twerking for Dancers & Clubs</h1>
+        <p class="hero-subtitle">Move how you feel, vibe how you live. 20 tracks. Pure joy, pure connection, pure movement.</p>
+        <button type="button" class="cta-primary" id="play-bootyquake">Play Bootyquake Radio</button>
+      </div>
+      <div class="hero-scroll">
+        <span>Scroll</span>
+        <div class="scroll-line"></div>
       </div>
     </section>
   </main>
@@ -269,11 +270,11 @@
       <a href="#home" class="logo">BOOTYQUAKE</a>
       <div class="footer-social">
         <a href="https://www.instagram.com/bootyquakeofficial" target="_blank" rel="noopener" aria-label="Instagram">IG</a>
-        <a href="https://www.tiktok.com/@bootyquakeofficial" target="_blank" rel="noopener" aria-label="TikTok">TikTok</a>
+        <a href="https://www.tiktok.com/@bootyquakeofficia" target="_blank" rel="noopener" aria-label="TikTok">TikTok</a>
         <a href="https://youtube.com/@bootyquakeofficial" target="_blank" rel="noopener" aria-label="YouTube">YouTube</a>
         <a href="https://open.spotify.com/artist/bootyquakeofficial" target="_blank" rel="noopener" aria-label="Spotify">Spotify</a>
       </div>
-      <p class="footer-copy">© 2025 BootyQuake Official. Move how you feel, vibe how you live. <a href="https://www.instagram.com/bootyquakeofficial" target="_blank" rel="noopener">@bootyquakeofficial</a> · <a href="https://www.tiktok.com/@bootyquakeofficial" target="_blank" rel="noopener">TikTok</a> · <a href="https://distrokid.com/vip/seven/12172379" target="_blank" rel="noopener">Distribute your music</a></p>
+      <p class="footer-copy">© 2025 BootyQuake Official. Move how you feel, vibe how you live. <a href="https://www.instagram.com/bootyquakeofficial" target="_blank" rel="noopener">@bootyquakeofficial</a> · <a href="https://www.tiktok.com/@bootyquakeofficia" target="_blank" rel="noopener">TikTok</a> · <a href="https://distrokid.com/vip/seven/12172379" target="_blank" rel="noopener">Distribute your music</a></p>
     </div>
   </footer>
 

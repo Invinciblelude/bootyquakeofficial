@@ -69,9 +69,8 @@ document.addEventListener('DOMContentLoaded', () => {
     e.target.reset();
   });
 
-  // Video hub – big player + thumbnail sidebar (YouTube-style, minimal)
+  // Video hub – thumbnails load videos in embed (no redirect to YouTube)
   const videoThumbnails = document.getElementById('video-thumbnails');
-  const videoMainPlaceholder = document.getElementById('video-main-placeholder');
   const videoPlayerWrap = document.querySelector('.video-player-wrap');
   const ytPlayerEl = document.getElementById('yt-player');
   if (videoThumbnails && ytPlayerEl) {
@@ -80,11 +79,15 @@ document.addEventListener('DOMContentLoaded', () => {
       const m = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
       return m ? m[1] : null;
     }
-    function buildEmbedUrl(videoId) {
-      return videoId ? `https://www.youtube.com/embed/${videoId}` : null;
-    }
     let ytPlayer = null;
     let pendingVideoId = null;
+
+    function ensureMuted() {
+      try {
+        if (ytPlayer?.mute) ytPlayer.mute();
+        if (ytPlayer?.setVolume) ytPlayer.setVolume(0);
+      } catch (_) {}
+    }
 
     function onYtStateChange(event) {
       const audio = document.getElementById('bootyquake-audio');
@@ -92,6 +95,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (!audio) return;
       window.__ytPlayerState = event.data;
       if (event.data === 1) {
+        ensureMuted();
         audio.play().catch(() => {});
         playPauseBtn?.setAttribute('aria-label', 'Pause');
         playPauseBtn && (playPauseBtn.textContent = '⏸');
@@ -107,6 +111,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (typeof YT !== 'undefined' && YT.Player) {
         if (ytPlayer) {
           ytPlayer.loadVideoById(videoId);
+          ensureMuted();
         } else {
           ytPlayer = new YT.Player('yt-player', {
             videoId: videoId,
@@ -121,13 +126,30 @@ document.addEventListener('DOMContentLoaded', () => {
               modestbranding: 1,
               iv_load_policy: 3,
               enablejsapi: 1,
-              origin: window.location.origin
+              origin: window.location.origin,
+              playsinline: 1,
+              fs: 1
             },
-            events: { 'onStateChange': onYtStateChange }
+            events: {
+              onStateChange: onYtStateChange,
+              onReady: () => ensureMuted()
+            }
           });
           window.__ytPlayer = ytPlayer;
         }
         videoPlayerWrap?.classList.add('has-video');
+        const capture = document.getElementById('video-click-capture');
+        if (capture) {
+          capture.onclick = () => {
+            try {
+              const p = window.__ytPlayer;
+              if (!p || !p.getPlayerState) return;
+              const s = p.getPlayerState();
+              if (s === 1) p.pauseVideo?.();
+              else p.playVideo?.();
+            } catch (_) {}
+          };
+        }
       } else {
         pendingVideoId = videoId;
       }
@@ -139,93 +161,90 @@ document.addEventListener('DOMContentLoaded', () => {
         pendingVideoId = null;
       }
     };
+
     function getThumbUrl(videoId) {
-      if (!videoId) return null;
-      return `https://img.youtube.com/vi/${videoId}/mqdefault.jpg`;
+      return videoId ? `https://img.youtube.com/vi/${videoId}/mqdefault.jpg` : null;
     }
+
     function loadVideos() {
       if (window.__videosLoaded) return;
       window.__videosLoaded = true;
-    fetch('./videos.json')
-      .then(res => res.ok ? res.json() : Promise.reject(res))
-      .then(videos => {
-        videoThumbnails.innerHTML = '';
-        const playlist = [
-          { src: './audio/block-party-bootyquake.mp3', title: 'Block Party Bootyquake', id: 'block-party-bootyquake' },
-          { src: './audio/Neon-Thong-Vision.mp3', title: 'Neon Thong Vision', id: 'neon-thong-vision' },
-          { src: './audio/queens-of-the-shakes.mp3', title: 'Queen of the Quake', id: 'queens-of-the-shakes' },
-          { src: './audio/big-booty-hustle.mp3', title: 'Big Booty Hustle', id: 'big-booty-hustle' },
-          { src: './audio/bounce-back-booty.mp3', title: 'Bounce Back Booty', id: 'bounce-back-booty' },
-          { src: './audio/scam-and-shake.mp3', title: 'Scam and Shake', id: 'scam-and-shake' },
-          { src: './audio/strip-to-the-top.mp3', title: 'Strip to the Top', id: 'strip-to-the-top' },
-          { src: './audio/rachet-earthquake.mp3', title: 'Rachet Earthquake', id: 'rachet-earthquake' },
-          { src: './audio/precious-things.mp3', title: 'Precious Things', id: 'precious-things' },
-          { src: './audio/boss-that-booty.mp3', title: 'Boss That Booty', id: 'boss-that-booty' },
-          { src: './audio/royal-life.mp3', title: 'Royal Life', id: 'royal-life' },
-          { src: './audio/loyal-love-righteous-life.mp3', title: 'Loyal Love / Righteous Life', id: 'loyal-love-righteous-life' },
-          { src: './audio/life-is-amazing.mp3', title: 'LIFE IS AMAZING', id: 'life-is-amazing' },
-          { src: './audio/billion-dollar-bitch-talk.mp3', title: 'Billion Dollar Bitch Talk', id: 'billion-dollar-bitch-talk' },
-          { src: './audio/billionaire-daydreams.mp3', title: 'BILLIONAIRE DAYDREAMS', id: 'billionaire-daydreams' },
-          { src: './audio/courtside-ass.mp3', title: 'Courtside Ass', id: 'courtside-ass' },
-          { src: './audio/astro-booty.mp3', title: 'ASTRO BOOTY', id: 'astro-booty' },
-          { src: './audio/booty-bag.mp3', title: 'BOOTY BAG', id: 'booty-bag' },
-          { src: './audio/fetch-that-monet.mp3', title: 'Fetch That Money', id: 'fetch-that-monet' },
-          { src: './audio/shake-that-booty-please.mp3', title: 'Shake That Booty Please', id: 'shake-that-booty-please' },
-          { src: './audio/ass-boost-party-anthem.mp3', title: 'Ass Boost Party Anthem', id: 'ass-boost-party-anthem' }
-        ];
-        const audio = document.getElementById('bootyquake-audio');
-        const playPauseBtn = document.getElementById('play-pause');
-        videos.forEach((v, videoIndex) => {
-          const videoId = v.platform === 'youtube' ? getYoutubeId(v.url) : null;
-          const embedUrl = videoId ? buildEmbedUrl(videoId) : null;
-          const thumbUrl = videoId ? getThumbUrl(videoId) : null;
-          const trackId = v.trackId || null;
-          const item = document.createElement('button');
-          item.type = 'button';
-          item.className = 'video-thumb-item';
-          item.dataset.embedUrl = embedUrl || '';
-          item.dataset.trackId = trackId || '';
-          item.dataset.videoIndex = String(videoIndex);
-          item.title = v.title || '';
-          if (thumbUrl) {
-            item.innerHTML = `<img src="${thumbUrl}" alt="" loading="lazy" decoding="async">`;
-          } else {
-            item.innerHTML = `<div class="thumb-placeholder">—</div>`;
-          }
-          item.addEventListener('click', () => {
-            document.querySelectorAll('.video-thumb-item').forEach(el => el.classList.remove('active'));
-            item.classList.add('active');
+      fetch('./videos.json')
+        .then(res => res.ok ? res.json() : Promise.reject(res))
+        .then(videos => {
+          videoThumbnails.innerHTML = '';
+          const playlist = [
+            { src: './audio/block-party-bootyquake.mp3', title: 'Block Party Bootyquake', id: 'block-party-bootyquake' },
+            { src: './audio/Neon-Thong-Vision.mp3', title: 'Neon Thong Vision', id: 'neon-thong-vision' },
+            { src: './audio/queens-of-the-shakes.mp3', title: 'Queen of the Quake', id: 'queens-of-the-shakes' },
+            { src: './audio/bounce-back-booty.mp3', title: 'Bounce Back Booty', id: 'bounce-back-booty' },
+            { src: './audio/scam-and-shake.mp3', title: 'Scam and Shake', id: 'scam-and-shake' },
+            { src: './audio/strip-to-the-top.mp3', title: 'Strip to the Top', id: 'strip-to-the-top' },
+            { src: './audio/rachet-earthquake.mp3', title: 'Rachet Earthquake', id: 'rachet-earthquake' },
+            { src: './audio/precious-things.mp3', title: 'Precious Things', id: 'precious-things' },
+            { src: './audio/boss-that-booty.mp3', title: 'Boss That Booty', id: 'boss-that-booty' },
+            { src: './audio/royal-life.mp3', title: 'Royal Life', id: 'royal-life' },
+            { src: './audio/loyal-love-righteous-life.mp3', title: 'Loyal Love / Righteous Life', id: 'loyal-love-righteous-life' },
+            { src: './audio/life-is-amazing.mp3', title: 'LIFE IS AMAZING', id: 'life-is-amazing' },
+            { src: './audio/billion-dollar-bitch-talk.mp3', title: 'Billion Dollar Bitch Talk', id: 'billion-dollar-bitch-talk' },
+            { src: './audio/billionaire-daydreams.mp3', title: 'BILLIONAIRE DAYDREAMS', id: 'billionaire-daydreams' },
+            { src: './audio/courtside-ass.mp3', title: 'Courtside Ass', id: 'courtside-ass' },
+            { src: './audio/astro-booty.mp3', title: 'ASTRO BOOTY', id: 'astro-booty' },
+            { src: './audio/booty-bag.mp3', title: 'BOOTY BAG', id: 'booty-bag' },
+            { src: './audio/fetch-that-monet.mp3', title: 'Fetch That Money', id: 'fetch-that-monet' },
+            { src: './audio/shake-that-booty-please.mp3', title: 'Shake That Booty Please', id: 'shake-that-booty-please' },
+            { src: './audio/ass-boost-party-anthem.mp3', title: 'Ass Boost Party Anthem', id: 'ass-boost-party-anthem' }
+          ];
+          const audio = document.getElementById('bootyquake-audio');
+          const playPauseBtn = document.getElementById('play-pause');
+          videos.forEach((v, videoIndex) => {
             const videoId = v.platform === 'youtube' ? getYoutubeId(v.url) : null;
-            const tid = item.dataset.trackId;
-            const vidx = parseInt(item.dataset.videoIndex, 10) || 0;
-            if (videoId) {
-              loadYtVideo(videoId);
+            const thumbUrl = videoId ? getThumbUrl(videoId) : null;
+            const trackId = v.trackId || null;
+            const item = document.createElement('button');
+            item.type = 'button';
+            item.className = 'video-thumb-item';
+            item.dataset.trackId = trackId || '';
+            item.dataset.videoIndex = String(videoIndex);
+            item.title = v.title || '';
+            if (thumbUrl) {
+              item.innerHTML = `<img src="${thumbUrl}" alt="" loading="lazy" decoding="async">`;
+            } else {
+              item.innerHTML = `<div class="thumb-placeholder">—</div>`;
             }
-            if (audio) {
-              let idx = tid ? playlist.findIndex(t => t.id === tid) : -1;
-              if (idx < 0) idx = vidx % playlist.length;
-              if (idx >= 0) {
-                const loadTrack = window.__bootyquakeLoadTrack;
-                if (loadTrack) loadTrack(idx);
-                audio.play().catch(() => {});
-                playPauseBtn?.setAttribute('aria-label', 'Pause');
-                playPauseBtn && (playPauseBtn.textContent = '⏸');
-                document.getElementById('hub-cta-bar')?.classList.add('playing');
-                try { window.__ytPlayer?.playVideo?.(); } catch (_) {}
+            item.addEventListener('click', (e) => {
+              e.preventDefault();
+              document.querySelectorAll('.video-thumb-item').forEach(el => el.classList.remove('active'));
+              item.classList.add('active');
+              const vid = v.platform === 'youtube' ? getYoutubeId(v.url) : null;
+              const tid = item.dataset.trackId;
+              const vidx = parseInt(item.dataset.videoIndex, 10) || 0;
+              if (vid) loadYtVideo(vid);
+              if (audio) {
+                let idx = tid ? playlist.findIndex(t => t.id === tid) : -1;
+                if (idx < 0) idx = vidx % playlist.length;
+                if (idx >= 0) {
+                  const loadTrack = window.__bootyquakeLoadTrack;
+                  if (loadTrack) loadTrack(idx);
+                  audio.play().catch(() => {});
+                  playPauseBtn?.setAttribute('aria-label', 'Pause');
+                  playPauseBtn && (playPauseBtn.textContent = '⏸');
+                  document.getElementById('hub-cta-bar')?.classList.add('playing');
+                  try { window.__ytPlayer?.playVideo?.(); } catch (_) {}
+                }
               }
-            }
+            });
+            videoThumbnails.appendChild(item);
           });
-          videoThumbnails.appendChild(item);
+        })
+        .catch(() => {
+          videoThumbnails.innerHTML = '<p class="videos-empty">Add videos to <code>videos.json</code>.</p>';
         });
-      })
-      .catch(() => {
-        videoThumbnails.innerHTML = '<p class="videos-empty">Add videos to <code>videos.json</code>.</p>';
-      });
     }
     const hubSection = document.getElementById('music');
     if (hubSection && 'IntersectionObserver' in window) {
       const io = new IntersectionObserver((entries) => {
-        if (entries[0]?.isIntersecting) { loadVideos(); }
+        if (entries[0]?.isIntersecting) loadVideos();
       }, { rootMargin: '200px' });
       io.observe(hubSection);
     } else {
@@ -238,7 +257,6 @@ document.addEventListener('DOMContentLoaded', () => {
     { src: './audio/block-party-bootyquake.mp3', title: 'Block Party Bootyquake', id: 'block-party-bootyquake', lyrics: true },
     { src: './audio/Neon-Thong-Vision.mp3', title: 'Neon Thong Vision', id: 'neon-thong-vision', lyrics: true },
     { src: './audio/queens-of-the-shakes.mp3', title: 'Queen of the Quake', id: 'queens-of-the-shakes', lyrics: true },
-    { src: './audio/big-booty-hustle.mp3', title: 'Big Booty Hustle', id: 'big-booty-hustle', lyrics: true },
     { src: './audio/bounce-back-booty.mp3', title: 'Bounce Back Booty', id: 'bounce-back-booty', lyrics: true },
     { src: './audio/scam-and-shake.mp3', title: 'Scam and Shake', id: 'scam-and-shake', lyrics: true },
     { src: './audio/strip-to-the-top.mp3', title: 'Strip to the Top', id: 'strip-to-the-top', lyrics: true },
@@ -1579,7 +1597,6 @@ document.addEventListener('DOMContentLoaded', () => {
     'block-party-bootyquake': blockPartyLyrics,
     'neon-thong-vision': neonThongLyrics,
     'queens-of-the-shakes': queenOfTheQuakeLyrics,
-    'big-booty-hustle': bigBootyHustleLyrics,
     'bounce-back-booty': bounceBackBootyLyrics,
     'scam-and-shake': scamAndShakeLyrics,
     'strip-to-the-top': stripToTheTopLyrics,

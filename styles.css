@@ -415,6 +415,8 @@ button.cta-primary {
   width: 260px;
   max-height: 85vh;
   overflow-y: auto;
+  position: relative;
+  z-index: 2;
 }
 
 .video-list-label {
@@ -655,6 +657,30 @@ button.cta-primary {
   border: none;
 }
 
+.video-player-wrap.has-video .video-main-placeholder {
+  display: none;
+}
+
+/* Hides YouTube "More videos" carousel so users aren't confused by unclickable thumbnails */
+.video-player-wrap.has-video .video-more-mask {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 40%;
+  background: linear-gradient(to top, var(--black) 0%, transparent 100%);
+  z-index: 9;
+  pointer-events: none;
+}
+
+/* Full overlay: blocks ALL clicks to YouTube (logo, More videos, etc.) so no redirects */
+.video-click-capture {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  cursor: pointer;
+}
+
 .video-main-placeholder {
   position: absolute;
   inset: 0;
@@ -682,10 +708,6 @@ button.cta-primary {
   z-index: 1;
 }
 
-.video-player-wrap.has-video .video-main-placeholder {
-  display: none;
-}
-
 .video-thumbnails {
   display: flex;
   flex-direction: column;
@@ -704,6 +726,8 @@ button.cta-primary {
   background: transparent;
   width: 100%;
   text-align: left;
+  pointer-events: auto;
+  position: relative;
 }
 
 .video-thumb-item:hover {
