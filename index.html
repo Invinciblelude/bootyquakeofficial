@@ -85,16 +85,17 @@
           <!-- Center: Video embed + CTA + Karaoke (videos play on-site, no redirect) -->
           <div class="hub-center">
             <audio id="bootyquake-audio" preload="metadata"></audio>
-            <div class="video-player-wrap" id="hub-video-wrap">
-              <div id="yt-player"></div>
-              <div class="video-more-mask" aria-hidden="true"></div>
-              <div class="video-click-capture" id="video-click-capture" aria-hidden="true" title="Click to play/pause — switch videos via Hit Music Videos on the right"></div>
-              <div class="video-main-placeholder" id="video-main-placeholder">
-                <img src="./hero-album-art.png" alt="BootyQuake" class="video-placeholder-logo">
-                <span class="video-placeholder-hint">Pick a track + video to mash</span>
+            <div class="hub-player-embed">
+              <div class="video-player-wrap" id="hub-video-wrap">
+                <div id="yt-player"></div>
+                <div class="video-more-mask" aria-hidden="true"></div>
+                <div class="video-click-capture" id="video-click-capture" aria-hidden="true" title="Click to play/pause — switch videos via Hit Music Videos on the right"></div>
+                <div class="video-main-placeholder" id="video-main-placeholder">
+                  <img src="./hero-album-art.png" alt="BootyQuake" class="video-placeholder-logo">
+                  <span class="video-placeholder-hint">Pick a track + video to mash</span>
+                </div>
               </div>
-            </div>
-            <div class="hub-cta-bar hub-cta-bar-visible" id="hub-cta-bar">
+              <div class="hub-cta-bar hub-cta-bar-visible" id="hub-cta-bar">
               <div class="hub-cta-controls">
                 <span class="hub-cta-track">Block Party Bootyquake</span>
               </div>
@@ -124,6 +125,7 @@
                   </div>
                 </div>
               </div>
+            </div>
             </div>
             <div class="karaoke-container" id="karaoke-container">
               <p class="karaoke-label">Lyrics</p>
