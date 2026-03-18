@@ -21,18 +21,31 @@ document.addEventListener('DOMContentLoaded', () => {
   handleScroll(); // Initial check
 
   // Mobile menu toggle
-  menuToggle?.addEventListener('click', () => {
-    nav?.classList.toggle('open');
-    socialHeader?.classList.toggle('open');
-    menuToggle?.setAttribute('aria-expanded', nav?.classList.contains('open'));
+  const navWrap = document.querySelector('.header-nav-wrap');
+  menuToggle?.addEventListener('click', (e) => {
+    e.stopPropagation();
+    navWrap?.classList.toggle('open');
+    const isOpen = navWrap?.classList.contains('open');
+    menuToggle?.setAttribute('aria-expanded', isOpen);
+    document.body.style.overflow = isOpen ? 'hidden' : '';
   });
 
   // Close mobile menu on nav link click
-  document.querySelectorAll('.nav a').forEach(link => {
+  document.querySelectorAll('.nav a, .social-header a').forEach(link => {
     link.addEventListener('click', () => {
-      nav?.classList.remove('open');
-      socialHeader?.classList.remove('open');
+      navWrap?.classList.remove('open');
+      menuToggle?.setAttribute('aria-expanded', 'false');
+      document.body.style.overflow = '';
     });
+  });
+
+  // Close mobile menu when clicking outside
+  document.addEventListener('click', (e) => {
+    if (navWrap?.classList.contains('open') && !header?.contains(e.target)) {
+      navWrap.classList.remove('open');
+      menuToggle?.setAttribute('aria-expanded', 'false');
+      document.body.style.overflow = '';
+    }
   });
 
   // Smooth scroll for anchor links (enhance native behavior)
