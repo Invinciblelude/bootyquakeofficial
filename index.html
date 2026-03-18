@@ -94,11 +94,36 @@
                 <span class="video-placeholder-hint">Pick a track + video to mash</span>
               </div>
             </div>
-            <div class="hub-cta-bar" id="hub-cta-bar">
-              <button type="button" class="hub-cta-play" id="play-pause" aria-label="Play">▶</button>
-              <span class="hub-cta-text">Pick a track, pick a video — mash them together. Lyrics sync with your song.</span>
-              <span class="hub-cta-track">Block Party Bootyquake</span>
-              <span class="hub-cta-time">0:00 / 0:00</span>
+            <div class="hub-cta-bar hub-cta-bar-visible" id="hub-cta-bar">
+              <div class="hub-cta-controls">
+                <span class="hub-cta-track">Block Party Bootyquake</span>
+              </div>
+              <div class="hub-control-block">
+                <div class="hub-control-row hub-control-video">
+                  <button type="button" class="hub-cta-play hub-cta-play-sm" id="video-play-pause" aria-label="Play video">▶</button>
+                  <span class="hub-control-label">Video</span>
+                  <span class="hub-cta-time" id="video-time">0:00 / 0:00</span>
+                </div>
+                <div class="hub-seek-row">
+                  <div class="hub-seek-bar" id="video-seek-bar" role="slider" aria-label="Seek video" tabindex="0" title="Click or drag to move video">
+                    <div class="hub-seek-fill" id="video-seek-fill"></div>
+                    <div class="hub-seek-thumb" id="video-seek-thumb"></div>
+                  </div>
+                </div>
+              </div>
+              <div class="hub-control-block">
+                <div class="hub-control-row hub-control-audio">
+                  <button type="button" class="hub-cta-play hub-cta-play-sm" id="audio-play-pause" aria-label="Play song">▶</button>
+                  <span class="hub-control-label">Song</span>
+                  <span class="hub-cta-time" id="audio-time">0:00 / 0:00</span>
+                </div>
+                <div class="hub-seek-row">
+                  <div class="hub-seek-bar" id="audio-seek-bar" role="slider" aria-label="Seek song" tabindex="0" title="Click or drag to move song">
+                    <div class="hub-seek-fill" id="audio-seek-fill"></div>
+                    <div class="hub-seek-thumb" id="audio-seek-thumb"></div>
+                  </div>
+                </div>
+              </div>
             </div>
             <div class="karaoke-container" id="karaoke-container">
               <p class="karaoke-label">Lyrics</p>

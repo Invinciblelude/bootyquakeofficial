@@ -352,12 +352,126 @@ button.cta-primary {
 
 .hub-cta-bar {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: 1rem;
   padding: 0.75rem 1rem;
   background: rgba(0,0,0,0.4);
   border-radius: 8px;
   border: 1px solid rgba(196,30,58,0.2);
+}
+
+/* Visible control bar: below video, always in view */
+.hub-cta-bar-visible {
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0.75rem;
+  padding: 1rem 1.25rem;
+  background: var(--black-elevated);
+  border: 2px solid var(--red-neon);
+  border-radius: 8px;
+  box-shadow: 0 0 20px rgba(196, 30, 58, 0.3);
+  min-height: 140px;
+}
+
+.hub-control-block {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.hub-control-block + .hub-control-block {
+  margin-top: 0.25rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid rgba(196, 30, 58, 0.4);
+}
+
+.hub-seek-row {
+  width: 100%;
+  min-height: 28px;
+  flex-shrink: 0;
+}
+
+.hub-seek-row .hub-seek-bar {
+  width: 100% !important;
+  min-width: 200px;
+  display: block;
+  height: 20px;
+  min-height: 20px;
+  background: rgba(255,255,255,0.5) !important;
+  border: 2px solid var(--red-neon);
+}
+
+.hub-control-video {
+  border: none;
+  padding: 0;
+}
+
+.hub-cta-bar-visible .hub-cta-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.hub-cta-bar-visible .hub-cta-track {
+  flex: 1;
+  font-size: 0.9rem;
+  min-width: 0;
+}
+
+.hub-control-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  flex-shrink: 0;
+  min-height: 44px;
+}
+
+.hub-control-label {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--gold);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  min-width: 4rem;
+}
+
+.hub-control-row .hub-cta-time {
+  font-size: 0.75rem;
+  flex-shrink: 0;
+  min-width: 4.5rem;
+}
+
+.hub-cta-bar-visible .hub-cta-time {
+  font-size: 0.85rem;
+  flex-shrink: 0;
+}
+
+.hub-cta-bar-visible .hub-seek-bar {
+  height: 18px;
+  min-height: 18px;
+  background: rgba(255,255,255,0.4);
+  border-radius: 9px;
+  border: 1px solid rgba(255,255,255,0.5);
+}
+
+.hub-cta-bar-visible .hub-seek-bar:hover {
+  background: rgba(255,255,255,0.55);
+}
+
+.hub-cta-bar-visible .hub-seek-fill {
+  border-radius: 9px 0 0 9px;
+  background: var(--red-neon);
+}
+
+.hub-cta-bar-visible .hub-seek-thumb {
+  width: 20px;
+  height: 20px;
+  border-width: 3px;
+  background: var(--white);
+  border-color: var(--red-neon);
 }
 
 .hub-cta-bar.playing .hub-cta-text {
@@ -383,6 +497,70 @@ button.cta-primary {
 
 .hub-cta-play:hover {
   background: var(--red-glow);
+}
+
+.hub-cta-play-sm {
+  width: 32px;
+  height: 32px;
+  font-size: 0.85rem;
+}
+
+.hub-seek-wrap {
+  width: 100%;
+  flex-basis: 100%;
+  order: 10;
+  padding-top: 0.5rem;
+}
+
+.hub-seek-label {
+  display: block;
+  font-size: 0.75rem;
+  color: var(--gray);
+  margin-bottom: 0.35rem;
+}
+
+.hub-seek-bar {
+  height: 14px;
+  background: rgba(255,255,255,0.2);
+  border-radius: 7px;
+  cursor: pointer;
+  position: relative;
+  overflow: visible;
+}
+
+.hub-seek-bar:hover {
+  background: rgba(255,255,255,0.3);
+}
+
+.hub-seek-bar:focus {
+  outline: 2px solid var(--red-neon);
+  outline-offset: 2px;
+}
+
+.hub-seek-fill {
+  height: 100%;
+  background: var(--red-neon);
+  border-radius: 7px 0 0 7px;
+  width: 0%;
+  transition: width 0.1s linear;
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+.hub-seek-thumb {
+  width: 16px;
+  height: 16px;
+  background: var(--white);
+  border: 2px solid var(--red-neon);
+  border-radius: 50%;
+  position: absolute;
+  left: 0%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.4);
+  transition: left 0.1s linear;
 }
 
 .hub-cta-text {
@@ -562,7 +740,7 @@ button.cta-primary {
   min-height: 2.5rem;
   max-height: 3.5rem;
   align-items: center;
-  scroll-behavior: smooth;
+  scroll-behavior: auto;
   -webkit-overflow-scrolling: touch;
 }
 
@@ -1323,7 +1501,9 @@ button.cta-primary {
     gap: 0.5rem;
   }
 
-  .hub-cta-play {
+  .hub-cta-play,
+  .hub-cta-bar-visible .hub-cta-play,
+  .hub-cta-play-sm {
     min-width: 44px;
     min-height: 44px;
   }
