@@ -69,6 +69,170 @@ document.addEventListener('DOMContentLoaded', () => {
     e.target.reset();
   });
 
+  // Video hub – big player + thumbnail sidebar (YouTube-style, minimal)
+  const videoThumbnails = document.getElementById('video-thumbnails');
+  const videoMainPlaceholder = document.getElementById('video-main-placeholder');
+  const videoPlayerWrap = document.querySelector('.video-player-wrap');
+  const ytPlayerEl = document.getElementById('yt-player');
+  if (videoThumbnails && ytPlayerEl) {
+    function getYoutubeId(url) {
+      if (!url || typeof url !== 'string') return null;
+      const m = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
+      return m ? m[1] : null;
+    }
+    function buildEmbedUrl(videoId) {
+      return videoId ? `https://www.youtube.com/embed/${videoId}` : null;
+    }
+    let ytPlayer = null;
+    let pendingVideoId = null;
+
+    function onYtStateChange(event) {
+      const audio = document.getElementById('bootyquake-audio');
+      const playPauseBtn = document.getElementById('play-pause');
+      if (!audio) return;
+      window.__ytPlayerState = event.data;
+      if (event.data === 1) {
+        audio.play().catch(() => {});
+        playPauseBtn?.setAttribute('aria-label', 'Pause');
+        playPauseBtn && (playPauseBtn.textContent = '⏸');
+      } else if (event.data === 2 || event.data === 0) {
+        audio.pause();
+        playPauseBtn?.setAttribute('aria-label', 'Play');
+        playPauseBtn && (playPauseBtn.textContent = '▶');
+      }
+    }
+
+    function loadYtVideo(videoId) {
+      if (!videoId) return;
+      if (typeof YT !== 'undefined' && YT.Player) {
+        if (ytPlayer) {
+          ytPlayer.loadVideoById(videoId);
+        } else {
+          ytPlayer = new YT.Player('yt-player', {
+            videoId: videoId,
+            width: '100%',
+            height: '100%',
+            playerVars: {
+              autoplay: 1,
+              mute: 1,
+              rel: 0,
+              loop: 1,
+              playlist: videoId,
+              modestbranding: 1,
+              iv_load_policy: 3,
+              enablejsapi: 1,
+              origin: window.location.origin
+            },
+            events: { 'onStateChange': onYtStateChange }
+          });
+          window.__ytPlayer = ytPlayer;
+        }
+        videoPlayerWrap?.classList.add('has-video');
+      } else {
+        pendingVideoId = videoId;
+      }
+    }
+
+    window.onYouTubeIframeAPIReady = function() {
+      if (pendingVideoId) {
+        loadYtVideo(pendingVideoId);
+        pendingVideoId = null;
+      }
+    };
+    function getThumbUrl(videoId) {
+      if (!videoId) return null;
+      return `https://img.youtube.com/vi/${videoId}/mqdefault.jpg`;
+    }
+    function loadVideos() {
+      if (window.__videosLoaded) return;
+      window.__videosLoaded = true;
+    fetch('./videos.json')
+      .then(res => res.ok ? res.json() : Promise.reject(res))
+      .then(videos => {
+        videoThumbnails.innerHTML = '';
+        const playlist = [
+          { src: './audio/block-party-bootyquake.mp3', title: 'Block Party Bootyquake', id: 'block-party-bootyquake' },
+          { src: './audio/Neon-Thong-Vision.mp3', title: 'Neon Thong Vision', id: 'neon-thong-vision' },
+          { src: './audio/queens-of-the-shakes.mp3', title: 'Queen of the Quake', id: 'queens-of-the-shakes' },
+          { src: './audio/big-booty-hustle.mp3', title: 'Big Booty Hustle', id: 'big-booty-hustle' },
+          { src: './audio/bounce-back-booty.mp3', title: 'Bounce Back Booty', id: 'bounce-back-booty' },
+          { src: './audio/scam-and-shake.mp3', title: 'Scam and Shake', id: 'scam-and-shake' },
+          { src: './audio/strip-to-the-top.mp3', title: 'Strip to the Top', id: 'strip-to-the-top' },
+          { src: './audio/rachet-earthquake.mp3', title: 'Rachet Earthquake', id: 'rachet-earthquake' },
+          { src: './audio/precious-things.mp3', title: 'Precious Things', id: 'precious-things' },
+          { src: './audio/boss-that-booty.mp3', title: 'Boss That Booty', id: 'boss-that-booty' },
+          { src: './audio/royal-life.mp3', title: 'Royal Life', id: 'royal-life' },
+          { src: './audio/loyal-love-righteous-life.mp3', title: 'Loyal Love / Righteous Life', id: 'loyal-love-righteous-life' },
+          { src: './audio/life-is-amazing.mp3', title: 'LIFE IS AMAZING', id: 'life-is-amazing' },
+          { src: './audio/billion-dollar-bitch-talk.mp3', title: 'Billion Dollar Bitch Talk', id: 'billion-dollar-bitch-talk' },
+          { src: './audio/billionaire-daydreams.mp3', title: 'BILLIONAIRE DAYDREAMS', id: 'billionaire-daydreams' },
+          { src: './audio/courtside-ass.mp3', title: 'Courtside Ass', id: 'courtside-ass' },
+          { src: './audio/astro-booty.mp3', title: 'ASTRO BOOTY', id: 'astro-booty' },
+          { src: './audio/booty-bag.mp3', title: 'BOOTY BAG', id: 'booty-bag' },
+          { src: './audio/fetch-that-monet.mp3', title: 'Fetch That Money', id: 'fetch-that-monet' },
+          { src: './audio/shake-that-booty-please.mp3', title: 'Shake That Booty Please', id: 'shake-that-booty-please' },
+          { src: './audio/ass-boost-party-anthem.mp3', title: 'Ass Boost Party Anthem', id: 'ass-boost-party-anthem' }
+        ];
+        const audio = document.getElementById('bootyquake-audio');
+        const playPauseBtn = document.getElementById('play-pause');
+        videos.forEach((v, videoIndex) => {
+          const videoId = v.platform === 'youtube' ? getYoutubeId(v.url) : null;
+          const embedUrl = videoId ? buildEmbedUrl(videoId) : null;
+          const thumbUrl = videoId ? getThumbUrl(videoId) : null;
+          const trackId = v.trackId || null;
+          const item = document.createElement('button');
+          item.type = 'button';
+          item.className = 'video-thumb-item';
+          item.dataset.embedUrl = embedUrl || '';
+          item.dataset.trackId = trackId || '';
+          item.dataset.videoIndex = String(videoIndex);
+          item.title = v.title || '';
+          if (thumbUrl) {
+            item.innerHTML = `<img src="${thumbUrl}" alt="" loading="lazy" decoding="async">`;
+          } else {
+            item.innerHTML = `<div class="thumb-placeholder">—</div>`;
+          }
+          item.addEventListener('click', () => {
+            document.querySelectorAll('.video-thumb-item').forEach(el => el.classList.remove('active'));
+            item.classList.add('active');
+            const videoId = v.platform === 'youtube' ? getYoutubeId(v.url) : null;
+            const tid = item.dataset.trackId;
+            const vidx = parseInt(item.dataset.videoIndex, 10) || 0;
+            if (videoId) {
+              loadYtVideo(videoId);
+            }
+            if (audio) {
+              let idx = tid ? playlist.findIndex(t => t.id === tid) : -1;
+              if (idx < 0) idx = vidx % playlist.length;
+              if (idx >= 0) {
+                const loadTrack = window.__bootyquakeLoadTrack;
+                if (loadTrack) loadTrack(idx);
+                audio.play().catch(() => {});
+                playPauseBtn?.setAttribute('aria-label', 'Pause');
+                playPauseBtn && (playPauseBtn.textContent = '⏸');
+                document.getElementById('hub-cta-bar')?.classList.add('playing');
+                try { window.__ytPlayer?.playVideo?.(); } catch (_) {}
+              }
+            }
+          });
+          videoThumbnails.appendChild(item);
+        });
+      })
+      .catch(() => {
+        videoThumbnails.innerHTML = '<p class="videos-empty">Add videos to <code>videos.json</code>.</p>';
+      });
+    }
+    const hubSection = document.getElementById('music');
+    if (hubSection && 'IntersectionObserver' in window) {
+      const io = new IntersectionObserver((entries) => {
+        if (entries[0]?.isIntersecting) { loadVideos(); }
+      }, { rootMargin: '200px' });
+      io.observe(hubSection);
+    } else {
+      loadVideos();
+    }
+  }
+
   // Bootyquake Radio - Play music (no affiliate links)
   const playlist = [
     { src: './audio/block-party-bootyquake.mp3', title: 'Block Party Bootyquake', id: 'block-party-bootyquake', lyrics: true },
@@ -1405,8 +1569,8 @@ document.addEventListener('DOMContentLoaded', () => {
   let currentTrack = 0;
   const audio = document.getElementById('bootyquake-audio');
   const playPauseBtn = document.getElementById('play-pause');
-  const trackDisplay = document.querySelector('.player-track');
-  const timeDisplay = document.querySelector('.player-time');
+  const trackDisplay = document.querySelector('.hub-cta-track');
+  const timeDisplay = document.querySelector('.hub-cta-time');
 
   const karaokeContainer = document.getElementById('karaoke-container');
   const karaokeLyrics = document.getElementById('karaoke-lyrics');
@@ -1443,9 +1607,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function loadTrack(index) {
     if (!audio) return;
+    lastKaraokeIndex = -1;
     currentTrack = index;
     audio.src = playlist[index].src;
     trackDisplay.textContent = playlist[index].title;
+    document.querySelectorAll('.track-list-item').forEach(el => {
+      el.classList.toggle('active', el.dataset.track === playlist[index].id);
+    });
     audio.load();
     audio.onerror = () => {
       trackDisplay.textContent = playlist[index].title + ' (add .mp3 to audio/)';
@@ -1454,7 +1622,7 @@ document.addEventListener('DOMContentLoaded', () => {
       karaokeContainer?.classList.add('visible');
       const lyrics = lyricsByTrack[playlist[index].id];
       if (lyrics && lyrics.length) {
-        karaokeLyrics.innerHTML = lyrics.map(l => '<p class="karaoke-line">' + escapeHtml(l.text) + '</p>').join('');
+        karaokeLyrics.innerHTML = lyrics.map((l, i) => '<span class="karaoke-line" data-time="' + l.time + '">' + escapeHtml(l.text) + '</span>').join('<span class="karaoke-sep"> • </span>');
       } else {
         karaokeLyrics.textContent = 'No lyrics for this track.';
       }
@@ -1462,6 +1630,7 @@ document.addEventListener('DOMContentLoaded', () => {
       karaokeContainer?.classList.remove('visible');
     }
   }
+  window.__bootyquakeLoadTrack = loadTrack;
 
   function formatTime(sec) {
     if (isNaN(sec) || sec < 0) return '0:00';
@@ -1470,8 +1639,38 @@ document.addEventListener('DOMContentLoaded', () => {
     return m + ':' + (s < 10 ? '0' : '') + s;
   }
 
+  let lastKaraokeIndex = -1;
   function updateTime() {
     if (timeDisplay && audio) timeDisplay.textContent = formatTime(audio.currentTime) + ' / ' + formatTime(audio.duration);
+    if (karaokeLyrics && karaokeContainer?.classList.contains('visible')) {
+      const lines = karaokeLyrics.querySelectorAll('.karaoke-line[data-time]');
+      if (lines.length) {
+        const t = (audio?.currentTime ?? 0) + 0.4;
+        let idx = -1;
+        for (let i = lines.length - 1; i >= 0; i--) {
+          if (Number(lines[i].dataset.time) <= t) { idx = i; break; }
+        }
+        if (idx < 0) idx = 0;
+        if (idx !== lastKaraokeIndex) {
+          lastKaraokeIndex = idx;
+          lines.forEach((el, i) => el.classList.toggle('active', i === idx));
+          const el = lines[idx];
+          if (el && karaokeLyrics) {
+            const targetLeft = Math.max(0, el.offsetLeft - karaokeLyrics.offsetWidth / 2 + el.offsetWidth / 2);
+            const start = karaokeLyrics.scrollLeft;
+            const dur = 12;
+            const startT = performance.now();
+            function tick(now) {
+              let t = Math.min((now - startT) / dur, 1);
+              t = t * t * (3 - 2 * t);
+              karaokeLyrics.scrollLeft = start + (targetLeft - start) * t;
+              if (t < 1) requestAnimationFrame(tick);
+            }
+            requestAnimationFrame(tick);
+          }
+        }
+      }
+    }
   }
 
   if (audio) {
@@ -1496,12 +1695,32 @@ document.addEventListener('DOMContentLoaded', () => {
 
   document.getElementById('play-bootyquake')?.addEventListener('click', playBootyquake);
 
-  // Track card Play buttons - play track if in playlist, else scroll to player
-  document.querySelectorAll('.track-card .track-play').forEach(btn => {
+  function showPlayingState() {
+    document.getElementById('hub-cta-bar')?.classList.add('playing');
+  }
+
+  playPauseBtn?.addEventListener('click', () => {
+    if (!audio) return;
+    const yt = window.__ytPlayer;
+    if (audio.paused) {
+      audio.play().catch(() => {});
+      playPauseBtn.setAttribute('aria-label', 'Pause');
+      playPauseBtn.textContent = '⏸';
+      showPlayingState();
+      try { yt?.playVideo?.(); } catch (_) {}
+    } else {
+      audio.pause();
+      playPauseBtn.setAttribute('aria-label', 'Play');
+      playPauseBtn.textContent = '▶';
+      try { yt?.pauseVideo?.(); } catch (_) {}
+    }
+  });
+
+  // Track list items - play track when clicked
+  document.querySelectorAll('.track-list-item').forEach(btn => {
     btn.addEventListener('click', (e) => {
       e.preventDefault();
-      const card = btn.closest('.track-card');
-      const trackId = card?.getAttribute('data-track');
+      const trackId = btn.getAttribute('data-track');
       if (trackId) {
         const idx = playlist.findIndex(t => t.id === trackId);
         if (idx >= 0 && audio) {
@@ -1509,24 +1728,16 @@ document.addEventListener('DOMContentLoaded', () => {
           audio.play().catch(() => {});
           playPauseBtn?.setAttribute('aria-label', 'Pause');
           playPauseBtn && (playPauseBtn.textContent = '⏸');
+          document.querySelectorAll('.track-list-item').forEach(el => el.classList.remove('active'));
+          btn.classList.add('active');
+          showPlayingState();
+          try { window.__ytPlayer?.playVideo?.(); } catch (_) {}
         }
       }
       document.getElementById('music')?.scrollIntoView({ behavior: 'smooth' });
     });
   });
 
-  playPauseBtn?.addEventListener('click', () => {
-    if (!audio) return;
-    if (audio.paused) {
-      audio.play().catch(() => {});
-      playPauseBtn.setAttribute('aria-label', 'Pause');
-      playPauseBtn.textContent = '⏸';
-    } else {
-      audio.pause();
-      playPauseBtn.setAttribute('aria-label', 'Play');
-      playPauseBtn.textContent = '▶';
-    }
-  });
   } catch (err) {
     console.error('BootyQuake init error:', err);
   }

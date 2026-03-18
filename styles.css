@@ -250,6 +250,11 @@ button.cta-primary {
   margin: 0 auto;
 }
 
+.container-full {
+  max-width: none;
+  padding: 0 1.5rem;
+}
+
 .section-title {
   font-family: 'Bebas Neue', sans-serif;
   font-size: clamp(2rem, 5vw, 3.5rem);
@@ -307,13 +312,168 @@ button.cta-primary {
   margin-bottom: 1.5rem;
 }
 
-/* Music Section */
-.music-section {
+/* Hub Section - tracks | video+karaoke | hit videos */
+.hub-section {
   background: var(--black-soft);
 }
 
+.hub-header {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.section-title-center {
+  text-align: center;
+}
+
+.culture-tag-center {
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  color: var(--gold);
+  text-transform: uppercase;
+  margin-top: 0.25rem;
+}
+
+.hub-cta-bar {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.75rem 1rem;
+  background: rgba(0,0,0,0.4);
+  border-radius: 8px;
+  border: 1px solid rgba(196,30,58,0.2);
+}
+
+.hub-cta-bar.playing .hub-cta-text {
+  display: none;
+}
+
+.hub-cta-bar.playing .hub-cta-track {
+  flex: 1;
+}
+
+.hub-cta-play {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--red-neon);
+  border: none;
+  color: var(--white);
+  font-size: 1rem;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background 0.2s;
+}
+
+.hub-cta-play:hover {
+  background: var(--red-glow);
+}
+
+.hub-cta-text {
+  flex: 1;
+  color: var(--gray);
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+.hub-cta-track {
+  font-weight: 600;
+  color: var(--white);
+  font-size: 0.95rem;
+}
+
+.hub-cta-time {
+  color: var(--gray);
+  font-size: 0.85rem;
+}
+
+.hub-layout {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+  min-height: 400px;
+}
+
+.hub-tracks {
+  flex-shrink: 0;
+  width: 260px;
+  max-height: 85vh;
+  overflow-y: auto;
+}
+
+.hub-center {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.hub-videos {
+  flex-shrink: 0;
+  width: 260px;
+  max-height: 85vh;
+  overflow-y: auto;
+}
+
+.video-list-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  color: var(--gold);
+  text-transform: uppercase;
+  margin-bottom: 0.75rem;
+}
+
+.track-list-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  color: var(--gold);
+  text-transform: uppercase;
+  margin-bottom: 0.75rem;
+}
+
+.track-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.track-list-item {
+  display: block;
+  width: 100%;
+  padding: 0.6rem 0.75rem;
+  text-align: left;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  color: var(--white);
+  font-family: inherit;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s, color 0.2s;
+}
+
+.track-list-item:hover {
+  background: rgba(196,30,58,0.15);
+  border-color: rgba(196,30,58,0.3);
+  color: var(--white);
+}
+
+.track-list-item.active {
+  background: rgba(196,30,58,0.25);
+  border-color: var(--red-neon);
+  color: var(--gold);
+}
+
+.track-list-item:focus {
+  outline: 2px solid var(--red-neon);
+  outline-offset: 2px;
+}
+
 .music-player {
-  margin-bottom: 2rem;
   padding: 1.5rem;
   background: var(--black-elevated);
   border: 1px solid rgba(196,30,58,0.3);
@@ -354,52 +514,76 @@ button.cta-primary {
 }
 
 .karaoke-container {
-  margin-top: 1.5rem;
-  padding: 1.25rem;
-  background: rgba(0,0,0,0.4);
-  border-radius: 8px;
+  padding: 0.5rem 0.75rem;
+  background: rgba(0,0,0,0.5);
+  border-radius: 6px;
   border: 1px solid rgba(196,30,58,0.2);
-  display: none;
-}
-
-.karaoke-container.visible {
   display: block;
 }
 
+.karaoke-container:not(.visible) .karaoke-lyrics {
+  color: var(--gray);
+  font-style: italic;
+}
+
 .karaoke-label {
-  font-size: 0.75rem;
+  font-size: 0.65rem;
   font-weight: 700;
   letter-spacing: 0.15em;
   color: var(--gold);
   text-transform: uppercase;
-  margin-bottom: 0.75rem;
+  margin-bottom: 0.35rem;
 }
 
 .karaoke-lyrics {
-  max-height: 200px;
-  overflow-y: auto;
-  min-height: 4rem;
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  overflow-y: hidden;
+  gap: 0 1.5rem;
+  padding: 0.35rem 0;
+  min-height: 2.5rem;
+  max-height: 3.5rem;
+  align-items: center;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
 }
 
 .karaoke-lyrics::-webkit-scrollbar {
-  width: 6px;
+  height: 4px;
 }
 
 .karaoke-lyrics::-webkit-scrollbar-track {
   background: rgba(0,0,0,0.2);
-  border-radius: 3px;
+  border-radius: 2px;
 }
 
 .karaoke-lyrics::-webkit-scrollbar-thumb {
   background: var(--red-neon);
-  border-radius: 3px;
+  border-radius: 2px;
 }
 
 .karaoke-line {
-  margin: 0 0 0.35rem 0;
-  font-size: 0.95rem;
-  line-height: 1.5;
-  color: var(--white);
+  flex-shrink: 0;
+  margin: 0;
+  padding: 0.2rem 0.5rem;
+  font-size: 0.9rem;
+  line-height: 1.4;
+  color: var(--gray);
+  white-space: nowrap;
+  transition: color 0.2s;
+}
+
+.karaoke-line.active {
+  color: var(--gold);
+  font-weight: 600;
+}
+
+.karaoke-sep {
+  flex-shrink: 0;
+  color: rgba(255,255,255,0.3);
+  font-size: 0.75rem;
+  pointer-events: none;
 }
 
 .spotify-embed {
@@ -409,65 +593,22 @@ button.cta-primary {
   border: 1px solid rgba(196,30,58,0.3);
 }
 
-.tracks-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 1.5rem;
-  margin-bottom: 2rem;
-}
-
-.track-card {
-  display: flex;
-  gap: 1rem;
-  padding: 1rem;
-  background: var(--black-elevated);
-  border: 1px solid rgba(196,30,58,0.2);
-  border-radius: 8px;
-  transition: border-color 0.3s, transform 0.3s;
-}
-
-.track-card:hover {
-  border-color: var(--red-neon);
-  transform: translateY(-2px);
-}
-
-.track-artwork {
-  width: 80px;
-  height: 80px;
-  min-width: 80px;
-  background: linear-gradient(135deg, var(--red-deep), var(--black-elevated));
-  background-image: url('./hero-album-art.png'), linear-gradient(135deg, var(--red-deep), var(--black-elevated));
-  background-size: cover;
-  background-position: center;
-  border-radius: 6px;
-}
-
-.track-info h3 {
-  font-size: 1rem;
-  margin-bottom: 0.25rem;
-}
-
-.track-info p {
-  font-size: 0.85rem;
-  color: var(--gray);
-  margin-bottom: 0.5rem;
-}
-
-.track-play {
-  color: var(--red-neon);
-  text-decoration: none;
-  font-size: 0.9rem;
-  font-weight: 600;
-}
-
-.track-play:hover {
-  color: var(--gold);
-}
-
 .press-kit {
   display: flex;
   gap: 1rem;
   flex-wrap: wrap;
+}
+
+.press-kit-sidebar {
+  margin-top: 1rem;
+  flex-direction: column;
+}
+
+.press-kit-sidebar .btn-secondary {
+  width: 100%;
+  text-align: center;
+  padding: 0.6rem 1rem;
+  font-size: 0.85rem;
 }
 
 .btn-secondary {
@@ -486,45 +627,154 @@ button.cta-primary {
   color: var(--white);
 }
 
-/* Videos Section */
-.videos-section {
-  background: var(--black);
-}
-
-.videos-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 1.5rem;
-}
-
-.video-card {
-  border: 1px solid rgba(196,30,58,0.2);
-  border-radius: 8px;
-  overflow: hidden;
-  transition: border-color 0.3s;
-}
-
-.video-card:hover {
-  border-color: var(--red-neon);
-}
-
-.video-thumb {
+.video-player-wrap {
   position: relative;
   padding-bottom: 56.25%;
   background: var(--black-elevated);
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid rgba(196,30,58,0.2);
 }
 
-.video-thumb iframe {
+.video-player-wrap iframe,
+.video-player-wrap > div#yt-player {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
+  border: none;
 }
 
-.video-card p {
-  padding: 1rem;
-  font-size: 0.95rem;
+.video-player-wrap > div#yt-player iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+.video-main-placeholder {
+  position: absolute;
+  inset: 0;
+  background: var(--black-elevated);
+  pointer-events: none;
+}
+
+.video-placeholder-logo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.9;
+}
+
+.video-placeholder-hint {
+  position: absolute;
+  bottom: 1rem;
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-size: 0.9rem;
+  color: var(--gray);
+  z-index: 1;
+}
+
+.video-player-wrap.has-video .video-main-placeholder {
+  display: none;
+}
+
+.video-thumbnails {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.video-thumb-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.25rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s;
+  border: 2px solid transparent;
+  background: transparent;
+  width: 100%;
+  text-align: left;
+}
+
+.video-thumb-item:hover {
+  background: rgba(196,30,58,0.15);
+  border-color: rgba(196,30,58,0.4);
+}
+
+.video-thumb-item.active {
+  border-color: var(--red-neon);
+  background: rgba(196,30,58,0.2);
+}
+
+.video-thumb-item img {
+  width: 120px;
+  height: 68px;
+  object-fit: cover;
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+
+.video-thumb-item:focus {
+  outline: 2px solid var(--red-neon);
+  outline-offset: 2px;
+}
+
+.video-thumb-item .thumb-placeholder {
+  width: 120px;
+  height: 68px;
+  background: var(--black-elevated);
+  border-radius: 4px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--gray);
+  font-size: 0.7rem;
+}
+
+.videos-loading,
+.videos-empty {
+  padding: 1.5rem;
+  text-align: center;
+  color: var(--gray);
+}
+
+.videos-empty code {
+  background: var(--black-elevated);
+  padding: 0.2em 0.4em;
+  border-radius: 4px;
+}
+
+@media (max-width: 1100px) {
+  .hub-layout {
+    flex-direction: column;
+  }
+  .hub-tracks {
+    width: 100%;
+    max-height: 220px;
+  }
+  .hub-videos {
+    width: 100%;
+    max-height: 220px;
+  }
+  .video-thumbnails {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+  }
+  .video-thumb-item {
+    width: calc(50% - 0.25rem);
+  }
 }
 
 /* Events Section */
@@ -934,6 +1184,15 @@ button.cta-primary {
   .newsletter-form {
     flex-direction: column;
   }
+
+  .hub-layout {
+    flex-direction: column;
+  }
+
+  .hub-tracks {
+    width: 100%;
+    max-height: 200px;
+  }
 }
 
 @media (max-width: 480px) {
@@ -945,7 +1204,4 @@ button.cta-primary {
     padding: 3rem 1rem;
   }
 
-  .tracks-grid {
-    grid-template-columns: 1fr;
-  }
 }
