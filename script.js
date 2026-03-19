@@ -1846,7 +1846,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // Lock lyrics scroll to seek bar: interpolate between lyric positions by time
-  const isMobile = () => window.innerWidth < 768 || navigator.maxTouchPoints > 1;
+  const isMobile = () => window.innerWidth < 768;
   function scrollToSyncWithSong(lines, idx, currentTime, duration) {
     const scrollEl = karaokeContainer || karaokeLyrics;
     if (!scrollEl || !lines.length || idx < 0) return;
