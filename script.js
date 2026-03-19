@@ -166,42 +166,39 @@ document.addEventListener('DOMContentLoaded', () => {
         const capture = document.getElementById('video-click-capture');
         const fullscreenEl = document.getElementById('hub-video-wrap') || videoPlayerWrap;
         const playerEmbed = document.querySelector('.hub-player-embed');
+        const isMobileOrIOS = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent) || (navigator.maxTouchPoints > 1 && window.innerWidth < 768);
         function toggleFullscreen() {
           if (!playerEmbed) return;
-          if (document.fullscreenElement || document.webkitFullscreenElement) {
-            (document.exitFullscreen || document.webkitExitFullscreen)?.call(document);
+          const isExpanded = playerEmbed.classList.contains('video-expanded');
+          const isNativeFs = !!(document.fullscreenElement || document.webkitFullscreenElement);
+          if (isExpanded || isNativeFs) {
+            if (isNativeFs) (document.exitFullscreen || document.webkitExitFullscreen)?.call(document);
             playerEmbed.classList.remove('video-expanded');
             return;
           }
-          if (playerEmbed.classList.contains('video-expanded')) {
-            playerEmbed.classList.remove('video-expanded');
+          if (isMobileOrIOS) {
+            playerEmbed.classList.add('video-expanded');
             return;
           }
-          const useExpanded = () => playerEmbed.classList.add('video-expanded');
-          if (fullscreenEl && (fullscreenEl.requestFullscreen || fullscreenEl.webkitRequestFullscreen)) {
-            const req = (fullscreenEl.requestFullscreen || fullscreenEl.webkitRequestFullscreen).call(fullscreenEl);
-            if (req && typeof req.then === 'function') {
-              req.catch(useExpanded);
-            } else {
-              useExpanded();
-            }
-          } else {
-            useExpanded();
+          try {
+            if (fullscreenEl?.requestFullscreen) fullscreenEl.requestFullscreen();
+            else if (fullscreenEl?.webkitRequestFullscreen) fullscreenEl.webkitRequestFullscreen();
+            else playerEmbed.classList.add('video-expanded');
+          } catch (_) {
+            playerEmbed.classList.add('video-expanded');
           }
         }
-        document.getElementById('video-expand-close')?.addEventListener('click', (e) => {
-          e.stopPropagation();
-          playerEmbed?.classList.remove('video-expanded');
-          try { (document.exitFullscreen || document.webkitExitFullscreen)?.call(document); } catch (_) {}
-        });
-        document.addEventListener('fullscreenchange', () => {
-          if (!document.fullscreenElement && !document.webkitFullscreenElement) playerEmbed?.classList.remove('video-expanded');
-        });
-        document.addEventListener('webkitfullscreenchange', () => {
-          if (!document.webkitFullscreenElement) playerEmbed?.classList.remove('video-expanded');
-        });
+        if (!window.__bootyquakeFullscreenListeners) {
+          window.__bootyquakeFullscreenListeners = true;
+          document.addEventListener('fullscreenchange', () => {
+            if (!document.fullscreenElement && !document.webkitFullscreenElement) document.querySelector('.hub-player-embed')?.classList.remove('video-expanded');
+          });
+          document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') document.querySelector('.hub-player-embed')?.classList.remove('video-expanded');
+          });
+        }
         if (capture) {
-          capture.onclick = (e) => { e.preventDefault(); toggleFullscreen(); };
+          capture.onclick = (e) => { e.preventDefault(); e.stopPropagation(); toggleFullscreen(); };
           capture.ondblclick = (e) => {
             e.preventDefault();
             try {
@@ -1849,9 +1846,15 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // Lock lyrics scroll to seek bar: interpolate between lyric positions by time
+  const isMobile = () => window.innerWidth < 768 || navigator.maxTouchPoints > 1;
   function scrollToSyncWithSong(lines, idx, currentTime, duration) {
-    const scrollEl = karaokeLyrics;
+    const scrollEl = karaokeContainer || karaokeLyrics;
     if (!scrollEl || !lines.length || idx < 0) return;
+    const line = lines[idx];
+    if (isMobile()) {
+      line?.scrollIntoView({ block: 'nearest', inline: 'center', behavior: 'auto' });
+      return;
+    }
     const maxScroll = Math.max(0, scrollEl.scrollWidth - scrollEl.clientWidth);
     if (maxScroll <= 0) return;
     const times = lines.map((el) => Number(el.dataset.time));
@@ -1861,10 +1864,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const progress = Math.min(1, Math.max(0, (currentTime - startTime) / segmentDur));
     const getScroll = (el) => el.offsetLeft - (scrollEl.clientWidth / 2) + (el.offsetWidth / 2);
     const startScroll = getScroll(lines[idx]);
-    const endScroll = idx < lines.length - 1 ? getScroll(lines[idx + 1]) : maxScroll;
+    const endScroll = idx < times.length - 1 ? getScroll(lines[idx + 1]) : maxScroll;
     const target = Math.max(0, Math.min(maxScroll, startScroll + progress * (endScroll - startScroll)));
     scrollEl.scrollLeft = target;
-    scrollEl.scrollTo?.({ left: target, behavior: 'auto' });
   }
 
   const LYRICS_OFFSET_STEP = 0.5;
