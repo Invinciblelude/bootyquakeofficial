@@ -1089,6 +1089,10 @@ button.cta-primary {
   .hub-center {
     order: 2;
     width: 100%;
+    flex: 0 1 auto;
+  }
+  .hub-player-embed {
+    flex: 0 0 auto;
   }
   .hub-videos {
     width: 100%;
@@ -1680,10 +1684,12 @@ button.cta-primary {
     min-width: 0;
   }
 
-  /* Lighter overlay on mobile – was darkening half the video */
   .video-player-wrap.has-video .video-more-mask {
-    height: 22%;
-    background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.4) 30px, transparent 100%);
+    display: none;
+  }
+
+  .video-player-wrap {
+    min-height: 200px;
   }
 
   .hub-lyrics-inline,
