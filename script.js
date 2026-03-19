@@ -165,33 +165,52 @@ document.addEventListener('DOMContentLoaded', () => {
         videoPlayerWrap?.classList.add('has-video');
         const capture = document.getElementById('video-click-capture');
         const fullscreenEl = document.getElementById('hub-video-wrap') || videoPlayerWrap;
-        if (capture) {
-          capture.onclick = () => {
-            if (!fullscreenEl) return;
-            try {
-              if (document.fullscreenElement || document.webkitFullscreenElement) {
-                (document.exitFullscreen || document.webkitExitFullscreen)?.call(document);
-              } else {
-                (fullscreenEl.requestFullscreen || fullscreenEl.webkitRequestFullscreen)?.call(fullscreenEl);
-              }
-            } catch (_) {
-              try {
-                const p = window.__ytPlayer;
-                if (p?.getPlayerState) {
-                  const s = p.getPlayerState();
-                  if (s === 1) p.pauseVideo?.();
-                  else p.playVideo?.();
-                }
-              } catch (__) {}
+        const playerEmbed = document.querySelector('.hub-player-embed');
+        function toggleFullscreen() {
+          if (!playerEmbed) return;
+          if (document.fullscreenElement || document.webkitFullscreenElement) {
+            (document.exitFullscreen || document.webkitExitFullscreen)?.call(document);
+            playerEmbed.classList.remove('video-expanded');
+            return;
+          }
+          if (playerEmbed.classList.contains('video-expanded')) {
+            playerEmbed.classList.remove('video-expanded');
+            return;
+          }
+          const useExpanded = () => playerEmbed.classList.add('video-expanded');
+          if (fullscreenEl && (fullscreenEl.requestFullscreen || fullscreenEl.webkitRequestFullscreen)) {
+            const req = (fullscreenEl.requestFullscreen || fullscreenEl.webkitRequestFullscreen).call(fullscreenEl);
+            if (req && typeof req.then === 'function') {
+              req.catch(useExpanded);
+            } else {
+              useExpanded();
             }
-          };
-          capture.ondblclick = () => {
+          } else {
+            useExpanded();
+          }
+        }
+        document.getElementById('video-expand-close')?.addEventListener('click', (e) => {
+          e.stopPropagation();
+          playerEmbed?.classList.remove('video-expanded');
+          try { (document.exitFullscreen || document.webkitExitFullscreen)?.call(document); } catch (_) {}
+        });
+        document.addEventListener('fullscreenchange', () => {
+          if (!document.fullscreenElement && !document.webkitFullscreenElement) playerEmbed?.classList.remove('video-expanded');
+        });
+        document.addEventListener('webkitfullscreenchange', () => {
+          if (!document.webkitFullscreenElement) playerEmbed?.classList.remove('video-expanded');
+        });
+        if (capture) {
+          capture.onclick = (e) => { e.preventDefault(); toggleFullscreen(); };
+          capture.ondblclick = (e) => {
+            e.preventDefault();
             try {
               const p = window.__ytPlayer;
-              if (!p || !p.getPlayerState) return;
-              const s = p.getPlayerState();
-              if (s === 1) p.pauseVideo?.();
-              else p.playVideo?.();
+              if (p?.getPlayerState) {
+                const s = p.getPlayerState();
+                if (s === 1) p.pauseVideo?.();
+                else p.playVideo?.();
+              }
             } catch (_) {}
           };
         }
@@ -1831,7 +1850,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Lock lyrics scroll to seek bar: interpolate between lyric positions by time
   function scrollToSyncWithSong(lines, idx, currentTime, duration) {
-    const scrollEl = karaokeContainer || karaokeLyrics;
+    const scrollEl = karaokeLyrics;
     if (!scrollEl || !lines.length || idx < 0) return;
     const maxScroll = Math.max(0, scrollEl.scrollWidth - scrollEl.clientWidth);
     if (maxScroll <= 0) return;
@@ -1843,7 +1862,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const getScroll = (el) => el.offsetLeft - (scrollEl.clientWidth / 2) + (el.offsetWidth / 2);
     const startScroll = getScroll(lines[idx]);
     const endScroll = idx < lines.length - 1 ? getScroll(lines[idx + 1]) : maxScroll;
-    scrollEl.scrollLeft = Math.max(0, Math.min(maxScroll, startScroll + progress * (endScroll - startScroll)));
+    const target = Math.max(0, Math.min(maxScroll, startScroll + progress * (endScroll - startScroll)));
+    scrollEl.scrollLeft = target;
+    scrollEl.scrollTo?.({ left: target, behavior: 'auto' });
   }
 
   const LYRICS_OFFSET_STEP = 0.5;

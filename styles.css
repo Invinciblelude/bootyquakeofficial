@@ -784,9 +784,6 @@ button.cta-primary {
   padding: 0.25rem 0;
   min-height: 2rem;
   display: block;
-  overflow-x: auto;
-  overflow-y: hidden;
-  -webkit-overflow-scrolling: touch;
   min-width: 0;
 }
 
@@ -805,14 +802,18 @@ button.cta-primary {
 }
 
 .karaoke-lyrics {
-  display: inline-flex;
+  display: flex;
   flex-wrap: nowrap;
   gap: 0 1.5rem;
   padding: 0.35rem 0;
   min-height: 2.5rem;
   max-height: 3.5rem;
   align-items: center;
-  flex-shrink: 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-x;
+  width: 100%;
 }
 
 .hub-lyrics-inline::-webkit-scrollbar,
@@ -898,6 +899,7 @@ button.cta-primary {
 }
 
 .hub-player-embed {
+  position: relative;
   background: var(--black-elevated);
   border-radius: 8px;
   overflow: hidden;
@@ -944,6 +946,59 @@ button.cta-primary {
   background: linear-gradient(to top, var(--black) 0%, var(--black) 80px, transparent 100%);
   z-index: 9;
   pointer-events: none;
+}
+
+/* Fallback "fullscreen" for iOS where Fullscreen API doesn't work on divs */
+.hub-player-embed.video-expanded {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  border-radius: 0;
+  display: flex;
+  flex-direction: column;
+  background: #000;
+}
+
+.hub-player-embed.video-expanded .video-player-wrap {
+  flex: 1;
+  min-height: 0;
+  padding-bottom: 0;
+  height: 100%;
+}
+
+.hub-player-embed.video-expanded .video-player-wrap > div#yt-player,
+.hub-player-embed.video-expanded .video-player-wrap > div#yt-player iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.hub-player-embed.video-expanded .hub-song-bar {
+  flex-shrink: 0;
+}
+
+.hub-player-embed.video-expanded .video-expand-close {
+  display: flex;
+}
+
+.video-expand-close {
+  display: none;
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  z-index: 10001;
+  width: 44px;
+  height: 44px;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0,0,0,0.6);
+  border: none;
+  border-radius: 50%;
+  color: #fff;
+  font-size: 1.5rem;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
 }
 
 /* Fullscreen: video fills screen */
@@ -1627,9 +1682,12 @@ button.cta-primary {
 
   .hub-lyrics-inline {
     width: 100%;
+  }
+
+  .karaoke-lyrics {
     overflow-x: scroll;
-    overflow-y: hidden;
     -webkit-overflow-scrolling: touch;
+    touch-action: pan-x;
   }
 
   .hub-song-controls {
