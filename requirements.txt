@@ -1,0 +1,2 @@
+# For scripts/audio-to-lrc.py – generate LRC lyrics from audio via Whisper
+openai-whisper>=20231117

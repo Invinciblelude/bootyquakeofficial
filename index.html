@@ -89,26 +89,34 @@
               <div class="video-player-wrap" id="hub-video-wrap">
                 <div id="yt-player"></div>
                 <div class="video-more-mask" aria-hidden="true"></div>
-                <div class="video-click-capture" id="video-click-capture" aria-hidden="true" title="Click to play/pause video"></div>
+                <div class="video-click-capture" id="video-click-capture" aria-hidden="true" title="Tap for fullscreen"></div>
                 <div class="video-main-placeholder" id="video-main-placeholder">
                   <img src="./hero-album-art.png" alt="BootyQuake" class="video-placeholder-logo">
                   <span class="video-placeholder-hint">Pick a track + video to mash</span>
                 </div>
               </div>
               <div class="hub-song-bar" id="hub-cta-bar">
+                <div class="hub-lyrics-inline" id="karaoke-container">
+                  <div class="karaoke-lyrics" id="karaoke-lyrics" aria-live="polite">Pick a track and play to see lyrics</div>
+                </div>
                 <div class="hub-song-controls">
                   <button type="button" class="hub-cta-play hub-cta-play-sm" id="audio-play-pause" aria-label="Play">▶</button>
                   <span class="hub-cta-track">Block Party Bootyquake</span>
                   <span class="hub-cta-time" id="audio-time">0:00 / 0:00</span>
+                  <span class="hub-sync-wrap" title="Lyrics early? Tap −. Lyrics late? Tap +.">
+                    <span class="hub-sync-label">Sync</span>
+                    <button type="button" class="hub-sync-btn" id="lyrics-sync-minus" aria-label="Delay lyrics 0.5s">−</button>
+                    <span class="hub-sync-value" id="lyrics-sync-value">0s</span>
+                    <button type="button" class="hub-sync-btn" id="lyrics-sync-plus" aria-label="Advance lyrics 0.5s">+</button>
+                  </span>
+                  <button type="button" class="hub-calibrate-btn" id="calibrate-lyrics" title="Click lyrics when you hear them to set timing">⏱ Calibrate</button>
+                  <button type="button" class="hub-export-btn" id="export-lrc" title="Download timed LRC file">Export LRC</button>
                 </div>
                 <div class="hub-seek-row">
                   <div class="hub-seek-bar" id="audio-seek-bar" role="slider" aria-label="Seek" tabindex="0" title="Click or drag to move">
                     <div class="hub-seek-fill" id="audio-seek-fill"></div>
                     <div class="hub-seek-thumb" id="audio-seek-thumb"></div>
                   </div>
-                </div>
-                <div class="hub-lyrics-inline" id="karaoke-container">
-                  <div class="karaoke-lyrics" id="karaoke-lyrics" aria-live="polite">Pick a track and play to see lyrics</div>
                 </div>
               </div>
             </div>

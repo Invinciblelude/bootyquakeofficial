@@ -618,6 +618,8 @@ button.cta-primary {
   font-size: 0.9rem;
   cursor: pointer;
   transition: background 0.2s, border-color 0.2s, color 0.2s;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
 }
 
 .track-list-item:hover {
@@ -677,7 +679,7 @@ button.cta-primary {
   font-size: 0.9rem;
 }
 
-/* Song bar: controls + lyrics – invisible until hover (desktop) */
+/* Song bar: lyrics on top, controls below – always visible */
 .hub-song-bar {
   display: flex;
   flex-direction: column;
@@ -685,22 +687,6 @@ button.cta-primary {
   padding: 0.5rem 0.75rem;
   background: rgba(0,0,0,0.5);
   border: none;
-  transition: opacity 0.2s ease;
-}
-
-@media (hover: hover) {
-  .hub-song-bar {
-    opacity: 0;
-  }
-  .hub-player-embed:hover .hub-song-bar {
-    opacity: 1;
-  }
-}
-
-@media (hover: none) {
-  .hub-song-bar {
-    opacity: 1;
-  }
 }
 
 .hub-song-controls {
@@ -720,10 +706,88 @@ button.cta-primary {
   flex-shrink: 0;
 }
 
+.hub-sync-wrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.15rem;
+  font-size: 0.65rem;
+  color: var(--gray);
+  flex-shrink: 0;
+}
+
+.hub-sync-label {
+  font-weight: 600;
+  letter-spacing: 0.05em;
+}
+
+.hub-sync-btn {
+  width: 1.2rem;
+  height: 1.2rem;
+  padding: 0;
+  font-size: 0.9rem;
+  line-height: 1;
+  background: rgba(196,30,58,0.3);
+  border: 1px solid rgba(196,30,58,0.5);
+  border-radius: 3px;
+  color: var(--gold);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hub-sync-btn:hover {
+  background: rgba(196,30,58,0.5);
+}
+
+.hub-sync-btn,
+.hub-calibrate-btn,
+.hub-export-btn,
+.hub-cta-play,
+.hub-seek-bar {
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+.hub-sync-value {
+  min-width: 2ch;
+  font-variant-numeric: tabular-nums;
+}
+
+.hub-calibrate-btn,
+.hub-export-btn {
+  font-size: 0.65rem;
+  padding: 0.2rem 0.4rem;
+  background: rgba(196,30,58,0.3);
+  border: 1px solid rgba(196,30,58,0.5);
+  border-radius: 4px;
+  color: var(--gold);
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.hub-calibrate-btn:hover,
+.hub-export-btn:hover {
+  background: rgba(196,30,58,0.5);
+}
+
+.hub-calibrate-btn.active {
+  background: var(--red-neon);
+  color: var(--white);
+}
+
+.karaoke-line.calibrated {
+  border-bottom: 1px solid var(--gold);
+}
+
 .hub-lyrics-inline {
   padding: 0.25rem 0;
   min-height: 2rem;
   display: block;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  min-width: 0;
 }
 
 .hub-lyrics-inline:not(.visible) .karaoke-lyrics {
@@ -741,28 +805,28 @@ button.cta-primary {
 }
 
 .karaoke-lyrics {
-  display: flex;
+  display: inline-flex;
   flex-wrap: nowrap;
-  overflow-x: auto;
-  overflow-y: hidden;
   gap: 0 1.5rem;
   padding: 0.35rem 0;
   min-height: 2.5rem;
   max-height: 3.5rem;
   align-items: center;
-  scroll-behavior: auto;
-  -webkit-overflow-scrolling: touch;
+  flex-shrink: 0;
 }
 
+.hub-lyrics-inline::-webkit-scrollbar,
 .karaoke-lyrics::-webkit-scrollbar {
   height: 4px;
 }
 
+.hub-lyrics-inline::-webkit-scrollbar-track,
 .karaoke-lyrics::-webkit-scrollbar-track {
   background: rgba(0,0,0,0.2);
   border-radius: 2px;
 }
 
+.hub-lyrics-inline::-webkit-scrollbar-thumb,
 .karaoke-lyrics::-webkit-scrollbar-thumb {
   background: var(--red-neon);
   border-radius: 2px;
@@ -776,11 +840,12 @@ button.cta-primary {
   line-height: 1.4;
   color: var(--gray);
   white-space: nowrap;
-  transition: color 0.2s;
+  transition: background 0.1s;
+  -webkit-background-clip: text;
+  background-clip: text;
 }
 
 .karaoke-line.active {
-  color: var(--gold);
   font-weight: 600;
 }
 
@@ -879,6 +944,28 @@ button.cta-primary {
   background: linear-gradient(to top, var(--black) 0%, var(--black) 80px, transparent 100%);
   z-index: 9;
   pointer-events: none;
+}
+
+/* Fullscreen: video fills screen */
+.video-player-wrap:fullscreen,
+.video-player-wrap:-webkit-full-screen {
+  padding-bottom: 0;
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.video-player-wrap:fullscreen > div#yt-player,
+.video-player-wrap:-webkit-full-screen > div#yt-player {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.video-player-wrap:fullscreen .video-click-capture,
+.video-player-wrap:-webkit-full-screen .video-click-capture {
+  cursor: pointer;
 }
 
 /* Full overlay: blocks ALL clicks to YouTube (logo, More videos, etc.) so no redirects */
@@ -1485,6 +1572,15 @@ button.cta-primary {
     min-height: auto;
   }
 
+  .hub-center {
+    flex: 0 1 auto;
+    align-self: stretch;
+  }
+
+  .hub-player-embed {
+    flex: 0 0 auto;
+  }
+
   .hub-section {
     padding-top: calc(5.5rem + env(safe-area-inset-top));
   }
@@ -1506,14 +1602,66 @@ button.cta-primary {
     font-size: 0.85rem;
   }
 
+  .track-list-item.active {
+    padding: 0.75rem 1rem;
+  }
+
   .container-full {
     padding-left: calc(1rem + env(safe-area-inset-left));
     padding-right: calc(1rem + env(safe-area-inset-right));
   }
 
+  .hub-song-bar,
   .hub-cta-bar {
     flex-wrap: wrap;
     gap: 0.5rem;
+    padding-left: calc(0.75rem + env(safe-area-inset-left));
+    padding-right: calc(0.75rem + env(safe-area-inset-right));
+    padding-bottom: calc(0.5rem + env(safe-area-inset-bottom));
+    min-width: 0;
+  }
+
+  .hub-lyrics-inline {
+    width: 100%;
+    overflow-x: scroll;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .hub-song-controls {
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    width: 100%;
+  }
+
+  .hub-song-controls .hub-cta-track {
+    flex: 1 1 100%;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    order: 1;
+  }
+
+  .hub-song-controls .hub-cta-play,
+  .hub-song-controls .hub-cta-time {
+    flex-shrink: 0;
+  }
+
+  .hub-sync-wrap,
+  .hub-calibrate-btn,
+  .hub-export-btn {
+    flex-shrink: 0;
+  }
+
+  .hub-seek-row {
+    width: 100%;
+    padding: 0;
+  }
+
+  .hub-seek-bar {
+    min-height: 44px;
+    touch-action: none;
   }
 
   .hub-cta-play,
@@ -1525,11 +1673,40 @@ button.cta-primary {
 
   .hub-player-embed {
     border-radius: 6px;
+    overflow: hidden;
+  }
+
+  .hub-center {
+    min-width: 0;
+  }
+
+  /* Lighter overlay on mobile – was darkening half the video */
+  .video-player-wrap.has-video .video-more-mask {
+    height: 22%;
+    background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.4) 30px, transparent 100%);
   }
 
   .hub-lyrics-inline,
   .karaoke-container {
-    max-height: 120px;
+    max-height: 100px;
+    min-height: 2.5rem;
+  }
+
+  .karaoke-lyrics {
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 0.5rem;
+  }
+
+  .hub-sync-btn {
+    min-width: 36px;
+    min-height: 36px;
+  }
+
+  .hub-calibrate-btn,
+  .hub-export-btn {
+    min-height: 36px;
+    padding: 0.35rem 0.5rem;
+    font-size: 0.7rem;
   }
 
   .video-thumb-item {
@@ -1551,6 +1728,21 @@ button.cta-primary {
     padding: 1rem;
     padding-left: calc(1rem + env(safe-area-inset-left));
     padding-right: calc(1rem + env(safe-area-inset-right));
+  }
+
+  .hub-song-controls .hub-cta-track {
+    font-size: 0.75rem;
+  }
+
+  .hub-sync-btn {
+    min-width: 36px;
+    min-height: 36px;
+  }
+
+  .hub-calibrate-btn,
+  .hub-export-btn {
+    font-size: 0.65rem;
+    padding: 0.3rem 0.4rem;
   }
 
   .section {
@@ -1578,6 +1770,11 @@ button.cta-primary {
 
   .video-thumb-item {
     width: 100%;
+  }
+
+  /* No overlay on small screens – full video visible */
+  .video-player-wrap.has-video .video-more-mask {
+    display: none;
   }
 
   .footer {

@@ -4,6 +4,7 @@
   "description": "BootyQuake Official - Bootyquake Chronicles",
   "scripts": {
     "serve": "npx serve . -p 8080",
-    "start": "npm run serve"
+    "start": "npm run serve",
+    "mobile": "python3 -m http.server 8080 --bind 0.0.0.0 || npx serve . -p 8080"
   }
 }
