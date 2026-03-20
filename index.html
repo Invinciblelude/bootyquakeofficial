@@ -42,16 +42,15 @@
   </header>
 
   <main>
-    <!-- Music + Videos Hub: loads first, tracks left | video + karaoke center | hit videos right -->
+    <!-- Music: tracks left | video center | hit videos right -->
     <section id="music" class="section hub-section hub-section-first">
       <div class="container container-full">
         <div class="hub-header">
           <h2 class="section-title section-title-center">Music</h2>
           <p class="culture-tag-center">For the culture</p>
         </div>
-
         <div class="hub-layout">
-          <!-- Left: Track list -->
+          <!-- Left: Track list (Bootyquake Chronicles) -->
           <aside class="hub-tracks">
             <p class="track-list-label">Bootyquake Chronicles</p>
             <div class="track-list" id="track-list">
@@ -71,7 +70,6 @@
               <button type="button" class="track-list-item" data-track="billionaire-daydreams">BILLIONAIRE DAYDREAMS</button>
               <button type="button" class="track-list-item" data-track="courtside-ass">Courtside Ass</button>
               <button type="button" class="track-list-item" data-track="astro-booty">ASTRO BOOTY</button>
-              <button type="button" class="track-list-item" data-track="booty-bag">BOOTY BAG</button>
               <button type="button" class="track-list-item" data-track="fetch-that-monet">Fetch That Money</button>
               <button type="button" class="track-list-item" data-track="shake-that-booty-please">Shake That Booty Please</button>
               <button type="button" class="track-list-item" data-track="ass-boost-party-anthem">Ass Boost Party Anthem</button>
@@ -82,47 +80,35 @@
             </div>
           </aside>
 
-          <!-- Center: Video embed + CTA + Karaoke (videos play on-site, no redirect) -->
+          <!-- Center: Video + controls -->
           <div class="hub-center">
-            <audio id="bootyquake-audio" preload="metadata"></audio>
-            <div class="hub-player-embed">
+            <audio id="bootyquake-audio" preload="auto" playsinline></audio>
+            <div class="hub-video-main">
               <div class="video-player-wrap" id="hub-video-wrap">
                 <div id="yt-player"></div>
-                <div class="video-more-mask" aria-hidden="true"></div>
-                <div class="video-click-capture" id="video-click-capture" aria-hidden="true" title="Click or tap for fullscreen"></div>
+                <div class="video-click-capture" id="video-click-capture" aria-hidden="true" title="Click or tap to pause/play"></div>
                 <div class="video-main-placeholder" id="video-main-placeholder">
                   <img src="./hero-album-art.png" alt="BootyQuake" class="video-placeholder-logo">
-                  <span class="video-placeholder-hint">Pick a track + video to mash</span>
+                  <span class="video-placeholder-hint">Pick a track and play</span>
                 </div>
               </div>
-              <div class="hub-song-bar" id="hub-cta-bar">
-                <div class="hub-lyrics-inline" id="karaoke-container">
-                  <div class="karaoke-lyrics" id="karaoke-lyrics" aria-live="polite">Pick a track and play to see lyrics</div>
-                </div>
-                <div class="hub-song-controls">
-                  <button type="button" class="hub-cta-play hub-cta-play-sm" id="audio-play-pause" aria-label="Play">▶</button>
-                  <span class="hub-cta-track">Block Party Bootyquake</span>
-                  <span class="hub-cta-time" id="audio-time">0:00 / 0:00</span>
-                  <span class="hub-sync-wrap" title="Lyrics ahead? Tap −. Lyrics behind? Tap +.">
-                    <span class="hub-sync-label">Sync</span>
-                    <button type="button" class="hub-sync-btn" id="lyrics-sync-minus" aria-label="Delay lyrics 0.5s">−</button>
-                    <span class="hub-sync-value" id="lyrics-sync-value">0s</span>
-                    <button type="button" class="hub-sync-btn" id="lyrics-sync-plus" aria-label="Advance lyrics 0.5s">+</button>
-                  </span>
-                  <button type="button" class="hub-calibrate-btn" id="calibrate-lyrics" title="Click lyrics when you hear them to set timing">⏱ Calibrate</button>
-                  <button type="button" class="hub-export-btn" id="export-lrc" title="Download timed LRC file">Export LRC</button>
-                </div>
-                <div class="hub-seek-row">
-                  <div class="hub-seek-bar" id="audio-seek-bar" role="slider" aria-label="Seek" tabindex="0" title="Click or drag to move">
-                    <div class="hub-seek-fill" id="audio-seek-fill"></div>
-                    <div class="hub-seek-thumb" id="audio-seek-thumb"></div>
-                  </div>
+            </div>
+            <div class="hub-song-bar" id="hub-cta-bar">
+              <div class="hub-song-controls">
+                <button type="button" class="hub-cta-play hub-cta-play-sm" id="audio-play-pause" aria-label="Play">▶</button>
+                <span class="hub-cta-track" id="track-display">Block Party Bootyquake</span>
+                <span class="hub-cta-time" id="audio-time">0:00 / 0:00</span>
+              </div>
+              <div class="hub-seek-row">
+                <div class="hub-seek-bar" id="audio-seek-bar" role="slider" aria-label="Seek" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" tabindex="0" title="Click or drag to seek">
+                  <div class="hub-seek-fill" id="audio-seek-fill"></div>
+                  <div class="hub-seek-thumb" id="audio-seek-thumb"></div>
                 </div>
               </div>
             </div>
           </div>
 
-          <!-- Right: Hit video thumbnails (click to play in embed, no redirect) -->
+          <!-- Right: Hit video thumbnails -->
           <aside class="hub-videos">
             <p class="video-list-label">Hit Music Videos</p>
             <div class="video-thumbnails" id="video-thumbnails">
