@@ -1819,6 +1819,7 @@ document.addEventListener('DOMContentLoaded', () => {
           const parsed = parseLrc(text);
           if (parsed.length) {
             renderLyrics(parsed);
+            setTimeout(updateTime, 0);
           } else {
             const fallback = lyricsByTrack[playlist[index].id];
             renderLyrics(fallback || []);
@@ -1989,15 +1990,24 @@ document.addEventListener('DOMContentLoaded', () => {
     window.__bootyquakeCurrentVideoIndex = 0;
     audio.addEventListener('timeupdate', updateTime);
     audio.addEventListener('loadedmetadata', updateTime);
+    audio.addEventListener('seeking', updateTime);
+    audio.addEventListener('seeked', updateTime);
+    let lyricsRafId = null;
+    function startLyricsLoop() {
+      if (lyricsRafId) cancelAnimationFrame(lyricsRafId);
+      function tick() {
+        updateTime();
+        if (audio && !audio.paused) lyricsRafId = requestAnimationFrame(tick);
+        else lyricsRafId = null;
+      }
+      lyricsRafId = requestAnimationFrame(tick);
+    }
     audio.addEventListener('play', () => {
       audioPlayBtn?.setAttribute('aria-label', 'Pause');
       audioPlayBtn && (audioPlayBtn.textContent = '⏸');
-      function lyricsTick() {
-        updateTime();
-        if (!audio.paused) requestAnimationFrame(lyricsTick);
-      }
-      requestAnimationFrame(lyricsTick);
+      startLyricsLoop();
     });
+    audio.addEventListener('playing', startLyricsLoop);
     audio.addEventListener('pause', () => {
       audioPlayBtn?.setAttribute('aria-label', 'Play');
       audioPlayBtn && (audioPlayBtn.textContent = '▶');

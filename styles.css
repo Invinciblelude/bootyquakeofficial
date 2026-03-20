@@ -264,7 +264,7 @@ button.cta-primary {
 
 /* Sections */
 .section {
-  padding: 5rem 2rem;
+  padding: 4rem 2rem;
   border-top: 1px solid rgba(196,30,58,0.2);
 }
 
@@ -275,7 +275,7 @@ button.cta-primary {
 
 .container-full {
   max-width: none;
-  padding: 0 1.5rem;
+  padding: 0 1.25rem;
 }
 
 .section-title {
@@ -338,6 +338,7 @@ button.cta-primary {
 /* Hub Section - tracks | video+karaoke | hit videos */
 .hub-section {
   background: var(--black-soft);
+  padding: 3rem 2rem 2rem;
 }
 
 .hub-header {
@@ -552,21 +553,24 @@ button.cta-primary {
 
 .hub-layout {
   display: flex;
-  gap: 1rem;
+  gap: 1.25rem;
   align-items: flex-start;
-  min-height: 400px;
+  min-height: 500px;
+  max-width: 1800px;
+  margin: 0 auto;
 }
 
 .hub-tracks {
   flex-shrink: 0;
-  width: 260px;
-  max-height: 85vh;
+  width: 200px;
+  max-height: 90vh;
   overflow-y: auto;
 }
 
 .hub-center {
   flex: 1;
   min-width: 0;
+  min-height: 520px;
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
@@ -574,8 +578,8 @@ button.cta-primary {
 
 .hub-videos {
   flex-shrink: 0;
-  width: 260px;
-  max-height: 85vh;
+  width: 200px;
+  max-height: 90vh;
   overflow-y: auto;
   position: relative;
   z-index: 2;
@@ -608,14 +612,14 @@ button.cta-primary {
 .track-list-item {
   display: block;
   width: 100%;
-  padding: 0.6rem 0.75rem;
+  padding: 0.65rem 0.85rem;
   text-align: left;
   background: transparent;
   border: 1px solid transparent;
   border-radius: 6px;
   color: var(--white);
   font-family: inherit;
-  font-size: 0.9rem;
+  font-size: 0.95rem;
   cursor: pointer;
   transition: background 0.2s, border-color 0.2s, color 0.2s;
   -webkit-tap-highlight-color: transparent;
@@ -683,8 +687,8 @@ button.cta-primary {
 .hub-song-bar {
   display: flex;
   flex-direction: column;
-  gap: 0.35rem;
-  padding: 0.5rem 0.75rem;
+  gap: 0.4rem;
+  padding: 0.6rem 0.85rem;
   background: rgba(0,0,0,0.5);
   border: none;
 }
@@ -835,8 +839,8 @@ button.cta-primary {
 .karaoke-line {
   flex-shrink: 0;
   margin: 0;
-  padding: 0.2rem 0.5rem;
-  font-size: 0.9rem;
+  padding: 0.25rem 0.5rem;
+  font-size: 1rem;
   line-height: 1.4;
   color: var(--gray);
   white-space: nowrap;
@@ -906,6 +910,7 @@ button.cta-primary {
 .video-player-wrap {
   position: relative;
   padding-bottom: 56.25%;
+  min-height: 420px;
   background: var(--black-elevated);
   border-radius: 0;
   overflow: hidden;
@@ -934,22 +939,18 @@ button.cta-primary {
   display: none;
 }
 
-/* Hides YouTube controls bar and "More videos" carousel */
+/* No overlay – show full video */
 .video-player-wrap.has-video .video-more-mask {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 45%;
-  background: linear-gradient(to top, var(--black) 0%, var(--black) 80px, transparent 100%);
-  z-index: 9;
-  pointer-events: none;
+  display: none;
 }
 
-/* Fallback "fullscreen" for iOS where Fullscreen API doesn't work on divs */
+/* Fallback "fullscreen" for iOS/mobile where Fullscreen API doesn't work on divs */
 .hub-player-embed.video-expanded {
   position: fixed;
-  inset: 0;
+  top: env(safe-area-inset-top, 0);
+  right: env(safe-area-inset-right, 0);
+  bottom: env(safe-area-inset-bottom, 0);
+  left: env(safe-area-inset-left, 0);
   z-index: 9999;
   border-radius: 0;
   display: flex;
@@ -974,6 +975,10 @@ button.cta-primary {
 
 .hub-player-embed.video-expanded .hub-song-bar {
   flex-shrink: 0;
+}
+
+.hub-player-embed.video-expanded .video-click-capture::before {
+  display: none;
 }
 
 .hub-player-embed.video-expanded .video-click-capture::after {
@@ -1019,6 +1024,21 @@ button.cta-primary {
   cursor: pointer;
   touch-action: manipulation;
   -webkit-tap-highlight-color: transparent;
+  user-select: none;
+}
+
+/* Fullscreen hint – click/tap video for fullscreen (hidden) */
+.video-player-wrap.has-video .video-click-capture::before {
+  content: '⛶';
+  position: absolute;
+  bottom: 0.5rem;
+  right: 0.5rem;
+  font-size: 1.25rem;
+  color: rgba(255,255,255,0.7);
+  background: rgba(0,0,0,0.4);
+  padding: 0.25rem 0.4rem;
+  border-radius: 4px;
+  pointer-events: none;
 }
 
 .video-main-placeholder {
@@ -1123,19 +1143,24 @@ button.cta-primary {
   .hub-layout {
     flex-direction: column;
     gap: 1.5rem;
+    min-height: auto;
   }
   .hub-tracks {
     width: 100%;
-    max-height: 180px;
+    max-height: 200px;
     order: 1;
   }
   .hub-center {
     order: 2;
     width: 100%;
     flex: 0 1 auto;
+    min-height: 0;
   }
   .hub-player-embed {
     flex: 0 0 auto;
+  }
+  .video-player-wrap {
+    min-height: 360px;
   }
   .hub-videos {
     width: 100%;
@@ -1726,6 +1751,13 @@ button.cta-primary {
 
   .hub-center {
     min-width: 0;
+    min-height: 0;
+  }
+
+  .video-player-wrap.has-video .video-click-capture::before {
+    content: 'Tap for fullscreen';
+    font-size: 0.7rem;
+    padding: 0.3rem 0.5rem;
   }
 
   .video-player-wrap.has-video .video-more-mask {
@@ -1733,13 +1765,13 @@ button.cta-primary {
   }
 
   .video-player-wrap {
-    min-height: 200px;
+    min-height: 280px;
   }
 
   .hub-lyrics-inline,
   .karaoke-container {
-    max-height: 100px;
-    min-height: 2.5rem;
+    max-height: 110px;
+    min-height: 2.75rem;
   }
 
   .karaoke-lyrics {
@@ -1822,9 +1854,13 @@ button.cta-primary {
     width: 100%;
   }
 
-  /* No overlay on small screens – full video visible */
-  .video-player-wrap.has-video .video-more-mask {
-    display: none;
+  .video-player-wrap {
+    min-height: 240px;
+  }
+
+  .video-player-wrap.has-video .video-click-capture::before {
+    content: 'Tap for fullscreen';
+    font-size: 0.65rem;
   }
 
   .footer {
